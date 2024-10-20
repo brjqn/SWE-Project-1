@@ -10,7 +10,14 @@ function Signup () {
     const navigate = useNavigate()
 
     const handleSubmit = (e) => {
-        e.preventDefault() 
+        e.preventDefault()
+
+        if (!name || !email || !password) {
+            // Show a pop-up if any fields are empty
+            window.alert('All fields are required');
+            return;
+        }
+
         axios.post('http://localhost:5001/register', {name, email, password})
         .then(result => {console.log(result)
         navigate('/login')
@@ -25,7 +32,7 @@ function Signup () {
                 <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="email">
-                        <strong>Name</strong>
+                        <strong>Name*</strong>
                     </label>
                     <input
                         type="text"
@@ -38,7 +45,7 @@ function Signup () {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="email">
-                        <strong>Email</strong>
+                        <strong>Email*</strong>
                     </label>
                     <input
                         type="email"
@@ -51,7 +58,7 @@ function Signup () {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="email">
-                        <strong>Password</strong>
+                        <strong>Password*</strong>
                     </label>
                     <input
                         type="password"
