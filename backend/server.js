@@ -1,27 +1,35 @@
-import express from 'express';
-import dotenv from "dotenv";
-import path from 'path';
-import {connectDB} from "./config/db.js";
-import workoutRoutes from "./routes/workout.routes.js";
+const express = require("express")
+const mongoose = require("mongoose")
+const cors = require("cors")
+const UserModel = require('./models/User')
 
-//this file does the heavy lifting for the connections of Node to MongoDB
+const app = express()
+app.use(express.json())
+app.use(cors())
 
-dotenv.config();
+mongoose.connect("mongodb+srv://gitfit_user:GitFit123@workout-routines.r8hts.mongodb.net/users");
 
-const app = express();
+app.post('/register', async (req, res) => {
+    const { name, email, password } = req.body;
 
-app.use(express.json()); //allows us to accept json data in req.body 
+    try {
+        // Check if the email already exists in the database
+        const existingUser = await UserModel.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: "Email already exists" });
+        }
 
-const PORT = process.env.PORT || 5000; //runs on local machine for now
+        // If email doesn't exist, create the new user
+        const newUser = new UserModel({ name, email, password });
+        await newUser.save();
+        return res.status(201).json({ message: "User registered successfully" });
 
-const __dirname = path.resolve();
-
-app.use("/api/workouts",workoutRoutes);
-
- app.listen(PORT, ()=> {
-    connectDB();
-    console.log("Server started at http://localhost:" + PORT);
+    } catch (error) {
+        console.error("Error during user registration:", error);
+        return res.status(500).json({ message: "Server error" });
+    }
 });
 
-//route for api 
-//config for .env create content bc call dotenv
+app.listen(5001, () => {
+    console.log("server is running")
+})
