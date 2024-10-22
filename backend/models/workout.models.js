@@ -9,7 +9,7 @@ const workoutSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    Equiptment:{
+    Equipment:{ //Corrected typo.
         type: String,
         required: true
     },
