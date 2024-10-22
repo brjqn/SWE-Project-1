@@ -1,0 +1,66 @@
+/* Sidebar styling */
+.sidebar {
+  background-color: #1c592c;
+  width: 150px;
+  height: 100vh; /* Full height */
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+/* Button styles */
+.sidebar-button {
+  width: 100%; /* full width of sidebar */
+  height: 50px;
+  background-color: #1c592c;
+  border: none;
+  color: white;
+  font-size: 18px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center; 
+}
+
+.sidebar-button:hover {
+  background-color: #144d24; /* Slightly darker on hover */
+}
+
+.signout-option {
+  margin-top: auto; /* Pushes the button to the bottom */
+}
+
+
+  /* Card styles */
+  .card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-body h3 {
+    margin-bottom: 15px;
+  }
+  
+  .card-body p {
+    margin-bottom: 20px;
+  }
+  
+  .card.clickable-card:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s;
+  }
+  
+  /* Make cursor pointer when hovering over clickable cards */
+  .card.clickable-card {
+    cursor: pointer;
+  }
+
+  /* grey line between title and cards */
+  .separator {
+    height: 1px; 
+    background-color: grey; 
+    margin-bottom: 20px; 
+    width: 100%;
+  }
+  
+  
