@@ -24,9 +24,27 @@ app.post('/register', async (req, res) => {
         await newUser.save();
         return res.status(201).json({ message: "User registered successfully" });
 
-    } catch (error) {
+    } 
+    
+    catch (error) {
         console.error("Error during user registration:", error);
         return res.status(500).json({ message: "Server error" });
+    }
+});
+
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    const user = await UserModel.findOne({ email });
+    if (user) {
+        if (user.password === password) {
+            res.json("Success")
+        }
+        else {
+            res.json("Password is Incorrect")
+        }
+    }
+    else {
+        res.json("Email has not been registered")
     }
 });
 
