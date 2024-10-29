@@ -32,6 +32,22 @@ app.post('/register', async (req, res) => {
     }
 });
 
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    const user = await UserModel.findOne({ email });
+    if (user) {
+        if (user.password === password) {
+            res.json("Success")
+        }
+        else {
+            res.json("Password is Incorrect")
+        }
+    }
+    else {
+        res.json("Email has not been registered")
+    }
+});
+
 app.listen(5001, () => {
     console.log("server is running")
 })
