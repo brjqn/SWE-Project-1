@@ -1,9 +1,11 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose')
 
 //this file is designed to represent the needed data fields for defining a workout 'object'
 //uses json
 
-const workoutSchema = new mongoose.Schema({
+
+
+const ExercisesSchema = new mongoose.Schema({
     //schema are all of the available fields
     Exercise:{
         type: String,
@@ -36,12 +38,15 @@ const workoutSchema = new mongoose.Schema({
     Modifications:{
         type: String,
         required: false
-    }
+    },
+    User_Made:{
+        type:Boolean,
+        required:true
+    },
 
-},{
-    timestamps: true //createdat, updatedat
-});
 
-const Workout = mongoose.model('Workout', workoutSchema);
+}, {collection: "exercises"})
+
+const ExercisesModel = mongoose.model('Exercises', ExercisesSchema);
 //should create model and schema 
-export default Workout;
+module.exports = ExercisesModel
