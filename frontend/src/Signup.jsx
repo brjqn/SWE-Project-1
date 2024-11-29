@@ -10,20 +10,29 @@ function Signup () {
     const navigate = useNavigate()
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-
+        e.preventDefault();
+    
         if (!name || !email || !password) {
             // Show a pop-up if any fields are empty
             window.alert('All fields are required');
             return;
         }
-
-        axios.post('http://localhost:5001/register', {name, email, password})
-        .then(result => {console.log(result)
-        navigate('/login')
-        })
-        .catch(err => console.log(err))
-    }
+    
+        axios.post('http://localhost:5001/register', { name, email, password })
+            .then(result => {
+                console.log(result);
+                navigate('/login');  // Redirect to login
+            })
+            .catch(err => {
+                if (err.response && err.response.status === 400) {
+                    // Show a pop-up if the email already exists
+                    window.alert(err.response.data.message);  // "Email already exists"
+                } else {
+                    console.error(err);
+                    window.alert('An error occurred. Please try again.');
+                }
+            });
+    };
 
     return (
         <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
