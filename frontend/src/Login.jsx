@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
+import {UserContext} from './UserContext';
 
 function Login() {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const navigate = useNavigate()
+
+    const {setCurrentUser} = useContext(UserContext);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -21,6 +24,9 @@ function Login() {
         .then(result => {
             console.log(result)
             if (result.data === "Success") {
+                //this setCurrentUser is acting as a global variable retain the user of the email
+                //Now can store data under that user like goals in the database
+                setCurrentUser(email);
                 navigate('/dashboard')
             }
             else if (result.data === "Email has not been registered") {
@@ -68,8 +74,10 @@ function Login() {
                 </button>
                 </form>
             </div>
-        </div>
+        
+    </div>
     );
+   
 }
 
 export default Login;
