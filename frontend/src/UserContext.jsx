@@ -1,4 +1,5 @@
 import React, { createContext, useState, useMemo } from 'react';
+import PropTypes from 'prop-types';
 
 export const UserContext = createContext();
 
@@ -12,3 +13,9 @@ export const UserProvider = ({ children }) => {
         </UserContext.Provider>
     );
 };
+
+UserProvider.propTypes = {
+    children: PropTypes.node.isRequired,
+};
+
+//This allows us to store and use the user within the entire app
