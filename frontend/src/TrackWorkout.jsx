@@ -6,8 +6,8 @@ import './General.css';
 import { UserContext } from "./UserContext";
 
 function TrackWorkout () {
-    const [exerciseName, setName] = useState()
-    const [assignedDate, setDate] = useState()  
+    const [exerciseName, setExerciseName] = useState()
+    const [assignedDate, setAssignedDate] = useState()  
     const [weight, setWeight] = useState()
     const [repetitions, setRepetitions] = useState()  
     const [time, setTime] = useState()  
@@ -29,7 +29,7 @@ function TrackWorkout () {
     }, []);
 
     const handleSelectChange = (event) => {
-        setName(event.target.value);
+        setExerciseName(event.target.value);
     };
 
     const handleSubmit = (e) => {
@@ -51,8 +51,8 @@ function TrackWorkout () {
         axios.post('http://localhost:5001/track-workout', {email: currentUser, ExerciseName:exerciseName, assigned_date: formattedDate, weight: numericWeight, repetitions: numericRepetitions, time: numericTime})
         .then(result => {
             console.log(result);
-            setName(''); 
-            setDate(''); 
+            setExerciseName(''); 
+            setAssignedDate(''); 
             setWeight(''); 
             setRepetitions('');
             setTime('');
@@ -92,7 +92,7 @@ function TrackWorkout () {
                             placeholder="Select Date"
                             value = {assignedDate}
                             className="form-control rounded-0"
-                            onChange={(e) => setDate(e.target.value)}
+                            onChange={(e) => setAssignedDate(e.target.value)}
                         />
                     </div>
                     <div className="mb-2">

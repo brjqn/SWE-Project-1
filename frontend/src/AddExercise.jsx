@@ -7,9 +7,9 @@ import './General.css';
 function NewExercises () {
     const [exercise, setExercise] = useState('');  
     const [equiptment, setEquiptment] = useState(''); 
-    const [exerciseType, setExercise_Type] = useState(''); 
-    const [majorMuscle, setMajor_Muscle] = useState(''); 
-    const [minorMuscle, setMinor_Muscle] = useState(''); 
+    const [exerciseType, setExerciseType] = useState(''); 
+    const [majorMuscle, setMajorMuscle] = useState(''); 
+    const [minorMuscle, setMinorMuscle] = useState(''); 
     const [example, setExample] = useState(''); 
     const [notes, setNotes] = useState(''); 
     const [modifications, setModifications] = useState('');
@@ -76,7 +76,7 @@ function NewExercises () {
                         placeholder="Enter Exercise Type"
                         type="text"
                         className="form-control rounded-0"
-                        onChange={(e) => setExercise_Type(e.target.value)}
+                        onChange={(e) => setExerciseType(e.target.value)}
                     />
                 </div>
                 <div className="mb-2">
@@ -87,7 +87,7 @@ function NewExercises () {
                         placeholder="Enter Major Muscle"
                         type="text"
                         className="form-control rounded-0"
-                        onChange={(e) => setMajor_Muscle(e.target.value)}
+                        onChange={(e) => setMajorMuscle(e.target.value)}
                     />
                 </div>
                 <div className="mb-2">
@@ -98,7 +98,7 @@ function NewExercises () {
                         placeholder="Enter Minor Muscle"
                         type="text"
                         className="form-control rounded-0"
-                        onChange={(e) => setMinor_Muscle(e.target.value)}
+                        onChange={(e) => setMinorMuscle(e.target.value)}
                     />
                 </div>
                 <div className="mb-2">
