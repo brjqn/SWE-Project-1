@@ -5,14 +5,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './General.css';
 //this file just adds an exercise using the workout.models' exercise schema
 function NewExercises () {
-    const [Exercise, setExercise] = useState('')
-    const [Equiptment, setEquiptment] = useState('')
-    const [Exercise_Type, setExercise_Type] = useState('')
-    const [Major_Muscle, setMajor_Muscle] = useState('')
-    const [Minor_Muscle, setMinor_Muscle] = useState('')
-    const [Example, setExample] = useState('')
-    const [Notes, setNotes] = useState('')
-    const [Modifications, setModifications] = useState('')
+    const [exercise, setExercise] = useState('');  
+    const [equiptment, setEquiptment] = useState(''); 
+    const [exerciseType, setExercise_Type] = useState(''); 
+    const [majorMuscle, setMajor_Muscle] = useState(''); 
+    const [minorMuscle, setMinor_Muscle] = useState(''); 
+    const [example, setExample] = useState(''); 
+    const [notes, setNotes] = useState(''); 
+    const [modifications, setModifications] = useState('');
     
     
     const navigate = useNavigate()
@@ -22,7 +22,7 @@ function NewExercises () {
 
         
 
-        axios.post('http://localhost:5001/exercise-list/add-exercise/', {Exercise, Equiptment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications})
+        axios.post('http://localhost:5001/exercise-list/add-exercise/', {Exercise: exercise, Equiptment: equiptment, Exercise_Type:exerciseType, Major_Muscle:majorMuscle, Minor_Muscle: minorMuscle, Example: example, Notes:notes, Modifications:modifications})
         .then(result => {console.log(result)
         if(result.data=== "Exercise successfully created"){
           navigate('/exercise-list/')  

@@ -5,10 +5,20 @@ const cors = require("cors")
 const UserModel = require('./models/User')
 const ExercisesModel = require('./models/workout.models')
 
+let corsOptions = {
+    origin: function (origin, callback) {
+        if (origin && origin.startsWith('http://localhost:5173')) {
+          callback(null, true); 
+        } else {
+          callback(new Error('Not allowed by CORS')); 
+        }
+    }
+}
+  
 
-const app = express()
+let app = express();
 app.use(express.json())
-app.use(cors())
+app.use(cors(corsOptions))
 const databaseURI = process.env.MONGO_URI;
 mongoose.connect(databaseURI)
     .then(() => console.log("Database Exercise connected successfully"))
