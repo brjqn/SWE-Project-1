@@ -11,7 +11,7 @@ const ExercisesSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    Equiptment:{
+    Equipment:{
         type: String,
         required: true
     },

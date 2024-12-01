@@ -80,7 +80,7 @@ app.post('/login', async (req, res) => {
 app.post('/exercise-list/add-exercise/', async (req,res) =>{
     //this is the post to populate the exercise data in the collection users
     //it adds to the schema and posts to mongodb
-    const {Exercise, Equiptment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications} = req.body;
+    const {Exercise, Equipment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications} = req.body;
     let query = {
         Exercise:req.body.Exercise.toString().trim(),
     };
@@ -89,7 +89,7 @@ app.post('/exercise-list/add-exercise/', async (req,res) =>{
         if (existingExercise) {
             return res.json("Exercise already exists" );
         }
-        const newExercise = new ExercisesModel({ Exercise, Equiptment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications, User_Made:true});
+        const newExercise = new ExercisesModel({ Exercise, Equipment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications, User_Made:true});
         await newExercise.save();
         return res.json("Exercise successfully created");
 

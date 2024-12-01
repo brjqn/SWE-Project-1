@@ -6,7 +6,7 @@ import './General.css';
 //this file just adds an exercise using the workout.models' exercise schema
 function NewExercises () {
     const [exercise, setExercise] = useState('');  
-    const [equiptment, setEquiptment] = useState(''); 
+    const [equipment, setEquipment] = useState(''); 
     const [exerciseType, setExerciseType] = useState(''); 
     const [majorMuscle, setMajorMuscle] = useState(''); 
     const [minorMuscle, setMinorMuscle] = useState(''); 
@@ -22,7 +22,7 @@ function NewExercises () {
 
         
 
-        axios.post('http://localhost:5001/exercise-list/add-exercise/', {Exercise: exercise, Equiptment: equiptment, Exercise_Type:exerciseType, Major_Muscle:majorMuscle, Minor_Muscle: minorMuscle, Example: example, Notes:notes, Modifications:modifications})
+        axios.post('http://localhost:5001/exercise-list/add-exercise/', {Exercise: exercise, Equipment: equipment, Exercise_Type:exerciseType, Major_Muscle:majorMuscle, Minor_Muscle: minorMuscle, Example: example, Notes:notes, Modifications:modifications})
         .then(result => {console.log(result)
         if(result.data=== "Exercise successfully created"){
           navigate('/exercise-list/')  
@@ -56,15 +56,15 @@ function NewExercises () {
                 </div>
                 <div className="mb-2">
                     <label htmlFor="email">
-                        <strong>Equiptment*</strong>
+                        <strong>Equipment*</strong>
                     </label>
                     <input
                         
-                        placeholder="Enter Equiptment Name"
+                        placeholder="Enter Equipment Name"
                         autoComplete="off"
                         type="text"
                         className="form-control rounded-0"
-                        onChange={(e) => setEquiptment(e.target.value)}
+                        onChange={(e) => setEquipment(e.target.value)}
                     />
                 </div>
                 <div className="mb-2">
