@@ -119,7 +119,7 @@ app.get('/track-workout', async (req, res) => {
 
 app.post('/track-workout', async (req, res)=>{
     //this is to create a goal underneath of the users schema
-    const {email, ExerciseName, assigned_date, weight, repetitions, time} = req.body;
+    const {ExerciseName, assigned_date, weight, repetitions, time} = req.body;
     try{
         let query = {
             email:req.body.email.toString().trim(),

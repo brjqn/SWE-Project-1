@@ -146,7 +146,7 @@ function TrackWorkout () {
             </div>
             <Link to="../dashboard" style={{ textDecoration: 'none', color: 'black' }}>
                 <div className="dashButton d-flex flex- justify-content-center align-items-center">
-                    <label>Dashboard</label>
+                    <span>Dashboard</span>
                 </div>
             </Link>
         </div>
