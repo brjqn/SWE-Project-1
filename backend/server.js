@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express")
 const mongoose = require("mongoose")
 const cors = require("cors")
@@ -8,7 +9,8 @@ const ExercisesModel = require('./models/workout.models')
 const app = express()
 app.use(express.json())
 app.use(cors())
-mongoose.connect("mongodb+srv://gitfit_user:GitFit123@workout-routines.r8hts.mongodb.net/users")
+const databaseURI = process.env.MONGO_URI;
+mongoose.connect(databaseURI)
     .then(() => console.log("Database Exercise connected successfully"))
     .catch(err => console.error("Database connection error:", err))
 

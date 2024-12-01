@@ -1,7 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios'
-import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './General.css';
 import { UserContext } from "./UserContext";
@@ -43,10 +42,6 @@ function TrackWorkout () {
         const formattedDate = new Date(assigned_date); 
 
         
-        if (!currentUser) {
-            alert("Please log in to track your workout.");
-            return;
-        }
         if (!ExerciseName) {
             alert("Please enter an exercise name.");
             return;
