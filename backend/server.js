@@ -39,25 +39,37 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    const user = await UserModel.findOne({ email });
-    if (user) {
-        if (user.password === password) {
-            res.json("Success")
+    if(!req.body.email || !req.body.password){
+        return res.json("Email has not been registered")
+    }
+    let query = {
+        email:req.body.email.toString().trim(),
+    };
+    try{
+      const user = await UserModel.findOne(query).exec();
+        if (user) {
+            if (user.password === req.body.password) {
+                res.json("Success")
+            }
+            else {
+                res.json("Password is Incorrect")
+            }
         }
         else {
-            res.json("Password is Incorrect")
-        }
+            res.json("Email has not been registered")
+        }  
     }
-    else {
-        res.json("Email has not been registered")
+    catch(err){
+        console.error("Database query error", err);
+        return res.status(500).json({error:"Internal server error"});
     }
+    
 });
 
 app.post('/exercise-list/add-exercise/', async (req,res) =>{
     //this is the post to populate the exercise data in the collection users
     //it adds to the schema and posts to mongodb
-    const {Exercise, Equiptment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications, User_Made} = req.body;
+    const {Exercise, Equiptment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications} = req.body;
 
     try{
         const existingExercise = await ExercisesModel.findOne({Exercise});
