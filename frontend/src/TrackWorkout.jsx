@@ -144,11 +144,6 @@ function TrackWorkout () {
                     </button>
                 </form>
             </div>
-            <Link to="../login" style={{ textDecoration: 'none', color: 'black' }}>
-                <div className="otherButton d-flex flex- justify-content-center align-items-center">
-                    <label>Login</label>
-                </div>
-            </Link>
             <Link to="../dashboard" style={{ textDecoration: 'none', color: 'black' }}>
                 <div className="dashButton d-flex flex- justify-content-center align-items-center">
                     <label>Dashboard</label>

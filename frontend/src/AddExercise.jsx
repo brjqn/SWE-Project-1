@@ -1,19 +1,18 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios'
-import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './General.css';
 //this file just adds an exercise using the workout.models' exercise schema
 function NewExercises () {
-    const [Exercise, setExercise] = useState()
-    const [Equiptment, setEquiptment] = useState()
-    const [Exercise_Type, setExercise_Type] = useState()
-    const [Major_Muscle, setMajor_Muscle] = useState()
-    const [Minor_Muscle, setMinor_Muscle] = useState()
-    const [Example, setExample] = useState()
-    const [Notes, setNotes] = useState()
-    const [Modifications, setModifications] = useState()
+    const [Exercise, setExercise] = useState('')
+    const [Equiptment, setEquiptment] = useState('')
+    const [Exercise_Type, setExercise_Type] = useState('')
+    const [Major_Muscle, setMajor_Muscle] = useState('')
+    const [Minor_Muscle, setMinor_Muscle] = useState('')
+    const [Example, setExample] = useState('')
+    const [Notes, setNotes] = useState('')
+    const [Modifications, setModifications] = useState('')
     
     
     const navigate = useNavigate()
@@ -25,7 +24,13 @@ function NewExercises () {
 
         axios.post('http://localhost:5001/exercise-list/add-exercise/', {Exercise, Equiptment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications})
         .then(result => {console.log(result)
-        navigate('/exercise-list/')
+        if(result.data=== "Exercise successfully created"){
+          navigate('/exercise-list/')  
+        }
+        else if (result.data === "Exercise already exists") {
+            window.alert("Exercise already exists");
+        }
+        
         })
         .catch(err => console.log(err))
     }
@@ -136,7 +141,7 @@ function NewExercises () {
             </div>
             <Link to="../exercise-list" style={{ textDecoration: 'none', color: 'black' }}>
                 <div className = "dashButton d-flex flex- justify-content-center align-items-center">
-                <label> Exercise List </label>
+                <div> Exercise List </div>
                 </div>
             </Link>
         </div>

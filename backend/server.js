@@ -17,10 +17,14 @@ mongoose.connect(databaseURI)
 app.post('/register', async (req, res) => {
     const { name, email, password } = req.body;
 
+    let query = {
+        email:req.body.email.toString().trim(),
+    };
+
     try {
          // Check if the email already exists in the database
          //needs collection users
-        const existingUser = await UserModel.findOne({ email });
+        const existingUser = await UserModel.findOne(query).exec();
         if (existingUser) {
             return res.status(400).json({ message: "Email already exists" });
         }
@@ -70,15 +74,17 @@ app.post('/exercise-list/add-exercise/', async (req,res) =>{
     //this is the post to populate the exercise data in the collection users
     //it adds to the schema and posts to mongodb
     const {Exercise, Equiptment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications} = req.body;
-
+    let query = {
+        Exercise:req.body.Exercise.toString().trim(),
+    };
     try{
-        const existingExercise = await ExercisesModel.findOne({Exercise});
+        const existingExercise = await ExercisesModel.findOne(query).exec();
         if (existingExercise) {
-            return res.status(400).json({ message: "Exercise already exists" });
+            return res.json("Exercise already exists" );
         }
         const newExercise = new ExercisesModel({ Exercise, Equiptment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications, User_Made:true});
         await newExercise.save();
-        return res.status(201).json({ message: "Exercise successfully created" });
+        return res.json("Exercise successfully created");
 
     }
     catch(error){
@@ -115,8 +121,11 @@ app.post('/track-workout', async (req, res)=>{
     //this is to create a goal underneath of the users schema
     const {email, ExerciseName, assigned_date, weight, repetitions, time} = req.body;
     try{
+        let query = {
+            email:req.body.email.toString().trim(),
+        };
         const addGoal = await UserModel.findOneAndUpdate(
-            {email},
+            query,
             {
                 $push:{
                     goalArray:{
@@ -129,7 +138,7 @@ app.post('/track-workout', async (req, res)=>{
                 }
             },
             {new: true}
-        );
+        ).exec();
         if(!addGoal){
             return res.status(404).json({message:"User not found"});
         }
