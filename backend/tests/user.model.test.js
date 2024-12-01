@@ -16,20 +16,23 @@ afterAll(async () => {
 });
 
 describe('Suite for User Model Unit Testing', () => {
-  test('Create/Save Valid User', async () => { //Creates and saves a valid user.
-    const validUser = new User({
-      name: 'Thomas',
-      email: 'thomas@alive.com',
-      password: 'Voyager1997!',
-    });
-
-    const savedUser = await validUser.save();
-    
-    expect(savedUser._id).toBeDefined();
-    expect(savedUser.name).toBe('Thomas');
-    expect(savedUser.email).toBe('thomas@alive.com');
-    expect(savedUser.password).toBe('Voyager1997!');
-  });
+    test('Create/Save Valid User', async () => { // Creates and saves a valid user.
+        // Use faker to generate random test data
+        const validUser = new User({
+          name: faker.name.firstName(),               // Random first name
+          email: faker.internet.email(),              // Random email
+          password: faker.internet.password(),        // Random password
+        });
+      
+        // Save the user to the database
+        const savedUser = await validUser.save();
+      
+        // Assertions to verify the saved user data
+        expect(savedUser._id).toBeDefined();
+        expect(savedUser.name).toBe(validUser.name);  // Check name
+        expect(savedUser.email).toBe(validUser.email); // Check email
+        expect(savedUser.password).toBe(validUser.password); // Check password
+      });
 
   test('Create Invalid User with Some Info', async () => { //Attempts to create invalid user with only a name.
     const invalidUser = new User({
