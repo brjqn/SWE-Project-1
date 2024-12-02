@@ -29,12 +29,11 @@ app.post('/register', async (req, res) => {
         return res.json("Invalid email format" );
     }
     const sanitizedEmail = validator.normalizeEmail(email);
-    let query = { email: sanitizedEmail };
 
     try {
          // Check if the email already exists in the database
          //needs collection users
-        const existingUser = await UserModel.findOne(query).exec();
+        const existingUser = await UserModel.findOne({ email: sanitizedEmail }).exec();
         if (existingUser) {
             return res.json("Email already exists" );
         }
@@ -60,10 +59,10 @@ app.post('/login', async (req, res) => {
         return res.json("Invalid email format" );
     }
     const sanitizedEmail = validator.normalizeEmail(req.body.email);
-    let query = { email: sanitizedEmail };
+    
 
     try{
-      const user = await UserModel.findOne(query).exec();
+      const user = await UserModel.findOne({ email: sanitizedEmail }).exec();
         if (user) {
             if (user.password === req.body.password) {
                 res.json("Success");
@@ -138,10 +137,9 @@ app.post('/track-workout', async (req, res)=>{
             return res.json("Invalid email format" );
         }
         const sanitizedEmail = validator.normalizeEmail(req.body.email);
-        let query = { email: sanitizedEmail };
     
         const addGoal = await UserModel.findOneAndUpdate(
-            query,
+            { email: sanitizedEmail },
             {
                 $push:{
                     goalArray:{
