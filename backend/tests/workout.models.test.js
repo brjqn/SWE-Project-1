@@ -23,6 +23,7 @@ describe('Suite for Workout Model Unit Testing', () => {
       Equipment: 'Cable Machine',
       Exercise_Type: 'Weight Training',
       Major_Muscle: 'Tricep',
+      User_Made: true
     });
     
     const savedWorkout = await validWorkout.save();
@@ -32,6 +33,7 @@ describe('Suite for Workout Model Unit Testing', () => {
     expect(savedWorkout.Equipment).toBe('Cable Machine');
     expect(savedWorkout.Exercise_Type).toBe('Weight Training');
     expect(savedWorkout.Major_Muscle).toBe('Tricep');
+    expect(savedWorkout.User_Made).toBe(true);
   });
 
   test('Create Valid Workout 2', async () => { //Creates and saves a valid workout with non-require information as well.
@@ -41,6 +43,7 @@ describe('Suite for Workout Model Unit Testing', () => {
       Exercise_Type: 'Calisthenics',
       Major_Muscle: 'Lower Chest',
       Minor_Muscle: 'Tricep',
+      User_Made: true
     });
     
     const savedWorkout = await validWorkout.save();
@@ -51,6 +54,7 @@ describe('Suite for Workout Model Unit Testing', () => {
     expect(savedWorkout.Exercise_Type).toBe('Calisthenics');
     expect(savedWorkout.Major_Muscle).toBe('Lower Chest');
     expect(savedWorkout.Minor_Muscle).toBe('Tricep');
+    expect(savedWorkout.User_Made).toBe(true);
   });
 
   test('Create Invalid Workout with missing information', async () => { //Attempts to create invalid workout with no information.
