@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 //this file is designed to represent the needed data fields for defining a workout 'object'
 //uses json
@@ -49,4 +49,4 @@ const ExercisesSchema = new mongoose.Schema({
 
 const ExercisesModel = mongoose.model('Exercises', ExercisesSchema);
 //should create model and schema 
-module.exports = ExercisesModel
+module.exports = ExercisesModel;

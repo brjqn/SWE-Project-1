@@ -1,9 +1,9 @@
 require('dotenv').config();
-const express = require("express")
-const mongoose = require("mongoose")
-const cors = require("cors")
-const UserModel = require('./models/User')
-const ExercisesModel = require('./models/workout.models')
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const UserModel = require('./models/User');
+const ExercisesModel = require('./models/workout.models');
 
 let corsOptions = {
     origin: (origin, callback) => {
@@ -13,17 +13,16 @@ let corsOptions = {
   
 
 let app = express();
-app.use(express.json())
-app.use(cors(corsOptions))
+app.use(express.json());
+app.use(cors(corsOptions));
 app.disable('x-powered-by');
 const databaseURI = process.env.MONGO_URI;
 mongoose.connect(databaseURI)
     .then(() => console.log("Database Exercise connected successfully"))
-    .catch(err => console.error("Database connection error:", err))
+    .catch(err => console.error("Database connection error:", err));
 
 app.post('/register', async (req, res) => {
     const { name, email, password } = req.body;
-
     let query = {
         email:req.body.email.toString().trim(),
     };
@@ -51,7 +50,7 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     if(!req.body.email || !req.body.password){
-        return res.json("Email has not been registered")
+        return res.json("Email has not been registered");
     }
     let query = {
         email:req.body.email.toString().trim(),
@@ -60,14 +59,14 @@ app.post('/login', async (req, res) => {
       const user = await UserModel.findOne(query).exec();
         if (user) {
             if (user.password === req.body.password) {
-                res.json("Success")
+                res.json("Success");
             }
             else {
-                res.json("Password is Incorrect")
+                res.json("Password is Incorrect");
             }
         }
         else {
-            res.json("Email has not been registered")
+            res.json("Email has not been registered");
         }  
     }
     catch(err){
@@ -155,8 +154,8 @@ app.post('/track-workout', async (req, res)=>{
         console.error("Error adding goal:", error);
         return res.status(500).json({message:"Server error"});
     }
-})
+});
 
 app.listen(5001, () => {
-    console.log("server is running")
+    console.log("server is running");
 })

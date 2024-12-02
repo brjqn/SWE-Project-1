@@ -94,4 +94,4 @@ describe('Suite for User Model Unit Testing', () => {
     expect(err.errors.email).toBeDefined();
     expect(err.errors.password).toBeDefined();
   });
-})
+});
