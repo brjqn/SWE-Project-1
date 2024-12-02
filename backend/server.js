@@ -1,9 +1,11 @@
 require('dotenv').config();
-const express = require("express")
-const mongoose = require("mongoose")
-const cors = require("cors")
-const UserModel = require('./models/User')
-const ExercisesModel = require('./models/workout.models')
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const UserModel = require('./models/User');
+const ExercisesModel = require('./models/workout.models');
+const validator = require('validator');
+const { parse } = require('json2csv');
 
 let corsOptions = {
     origin: (origin, callback) => {
@@ -13,27 +15,31 @@ let corsOptions = {
   
 
 let app = express();
-app.use(express.json())
-app.use(cors(corsOptions))
+app.use(express.json());
+app.use(cors(corsOptions)); //put back corsOptions
 app.disable('x-powered-by');
 const databaseURI = process.env.MONGO_URI;
 mongoose.connect(databaseURI)
     .then(() => console.log("Database Exercise connected successfully"))
-    .catch(err => console.error("Database connection error:", err))
+    .catch(err => console.error("Database connection error:", err));
 
 app.post('/register', async (req, res) => {
+    //Block?
     const { name, email, password } = req.body;
-
-    let query = {
-        email:req.body.email.toString().trim(),
-    };
+    // Validate and sanitize email to prevent NoSQL Injection
+    if (!email || !validator.isEmail(email)) {
+        return res.json("Invalid email format" );
+    }
+    // eslint-disable-next-line security/detect-object-injection
+    const sanitizedEmail = validator.normalizeEmail(email);
+    
 
     try {
          // Check if the email already exists in the database
          //needs collection users
-        const existingUser = await UserModel.findOne(query).exec();
+        const existingUser = await UserModel.findOne({ email: sanitizedEmail }).lean();
         if (existingUser) {
-            return res.status(400).json({ message: "Email already exists" });
+            return res.json("Email already exists" );
         }
 
         // If email doesn't exist, create the new user
@@ -51,23 +57,26 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     if(!req.body.email || !req.body.password){
-        return res.json("Email has not been registered")
+        return res.json("Email has not been registered");
     }
-    let query = {
-        email:req.body.email.toString().trim(),
-    };
+    if (!req.body.email || !validator.isEmail(req.body.email)) {
+        return res.json("Invalid email format" );
+    }
+    const sanitizedEmail = validator.normalizeEmail(req.body.email);
+    
+
     try{
-      const user = await UserModel.findOne(query).exec();
+      const user = await UserModel.findOne({ email: sanitizedEmail }).exec();
         if (user) {
             if (user.password === req.body.password) {
-                res.json("Success")
+                res.json("Success");
             }
             else {
-                res.json("Password is Incorrect")
+                res.json("Password is Incorrect");
             }
         }
         else {
-            res.json("Email has not been registered")
+            res.json("Email has not been registered");
         }  
     }
     catch(err){
@@ -128,9 +137,13 @@ app.post('/track-workout', async (req, res)=>{
     //this is to create a goal underneath of the users schema
     const {ExerciseName, assigned_date, weight, repetitions, time} = req.body;
     try{
-        let query = {
-            email:req.body.email.toString().trim(),
-        };
+        if (!req.body.email || !validator.isEmail(req.body.email)) {
+            return res.json("Invalid email format" );
+        }
+        const sanitizedEmail = validator.normalizeEmail(req.body.email);
+
+        let query = { email: sanitizedEmail};
+    
         const addGoal = await UserModel.findOneAndUpdate(
             query,
             {
@@ -155,8 +168,59 @@ app.post('/track-workout', async (req, res)=>{
         console.error("Error adding goal:", error);
         return res.status(500).json({message:"Server error"});
     }
-})
+});
+
+app.get('/download-goals/:email', async (req, res) => {
+
+    try {
+        const { email } = req.params;
+
+        if (!validator.isEmail(email)) {
+            return res.status(400).json({ message: 'Invalid email format' });
+        }
+
+        const user = await UserModel.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (!user.goalArray || user.goalArray.length === 0) {
+            return res.status(404).json({ message: 'No goals found for this user' });
+        }
+
+        // defines the headers for csv file
+        const fields = [
+            'ExerciseName', // This will be mapped to 'Exercise Name'
+            'assigned_date', 
+            'weight', 
+            'repetitions', 
+            'time' 
+        ];
+
+        // Map goalArray to match header format
+        const mappedGoals = user.goalArray.map(goal => ({
+            ExerciseName: goal.ExerciseName,
+            assigned_date: goal.assigned_date,
+            weight: goal.weight || '', // Default to empty string if undefined
+            repetitions: goal.repetitions || '', 
+            time: goal.time || '' 
+        }));
+
+        // Convert the mapped goals to CSV
+        const csv = parse(mappedGoals, { fields});
+        const buffer = Buffer.from(csv, 'utf-8');
+
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename=goals.csv');
+        res.send(buffer);
+
+    } catch (error) {
+        console.error('Error fetching user goals:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
 
 app.listen(5001, () => {
-    console.log("server is running")
+    console.log("server is running");
 })

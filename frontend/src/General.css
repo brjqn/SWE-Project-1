@@ -1,18 +1,20 @@
-/*These are general boxes and buttons I used for AddExercise, TrackWorkout, and ExerciseList*/
+
+/* These are general boxes and buttons I used for AddExercise, TrackWorkout, and ExerciseList */
+
 .header{
-    
     position: "relative";
     top: "0";
     width: 100%;
     max-width: fit-content;
     height: fit-content;
-    border: 2px solid rgb(0, 0, 0);
+    border: 2px solid rgb(0 0 0);
     background-color: #fcfffd;
     padding: 30px;
     text-align: center;
 }
+
 .header:hover {
-    background-color: rgb(64, 188, 42);
+    background-color: rgb(64 188 42);
     transform: scale(1.1); /* Slightly enlarge the box */
     transition: all 0.3s ease;
 }
@@ -30,41 +32,45 @@
     padding: 30px; /* Add some inner spacing */
     text-align: center; /* Center the text horizontally */
     
-    
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Add a subtle shadow */
+
      /* Horizontal centering */
+
     /* Use flexbox for centering */
+
      /* Center content horizontally */
+
      /* Center content vertically */
 }
+
 .box1:hover {
-    background-color: rgb(64, 188, 42);
+    background-color: rgb(64 188 42);
     transform: scale(1.1); /* Slightly enlarge the box */
     transition: all 0.3s ease;
 }
 
 .box2 {
     width: 100%; /* Set the width of the box (adjust as needed) */
-    
     height: 20%; /* Set the height of the box */
-    
     border: 2px solid black; /* Add a border to make it visible */
     background-color: #fcfffd; /* Add a background color */
     padding: 10px; /* Add some inner spacing */
     text-align: center; /* Center the text horizontally */
     margin: 10px auto;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Add a subtle shadow */
+
      /* Horizontal centering */
+
     /* Use flexbox for centering */
     justify-content: center; /* Center content horizontally */
     align-items: center; /* Center content vertically */
 }
+
 .box2:hover {
-    background-color: rgb(64, 188, 42);
+    background-color: rgb(64 188 42);
     transform: scale(1.1); /* Slightly enlarge the box */
     transition: all 0.3s ease;
 }
-.dashButton{
+
+.dash-button{
     position: fixed;
     right: 0;
     bottom: 0;
@@ -73,16 +79,18 @@
     max-height: fit-content;
     height: 20%;
     text-align: center;
-    background-color: rgb(252, 253, 253);
+    background-color: rgb(252 253 253);
     padding: 10px;
     border: 2px solid black;
 }
-.dashButton:hover {
-    background-color: rgb(64, 188, 42);
+
+.dash-button:hover {
+    background-color: rgb(64 188 42);
     transform: scale(1.1); /* Slightly enlarge the box */
     transition: all 0.3s ease;
 }
-.otherButton{
+
+.other-button{
     position: fixed;
     left: 0;
     bottom: 0;
@@ -91,12 +99,13 @@
     max-height: fit-content;
     height: 20%;
     text-align: center;
-    background-color: rgb(252, 253, 253);
+    background-color: rgb(252 253 253);
     padding: 10px;
     border: 2px solid black;
 }
-.otherButton:hover {
-    background-color: rgb(64, 188, 42);
+
+.other-button:hover {
+    background-color: rgb(64 188 42);
     transform: scale(1.1); /* Slightly enlarge the box */
     transition: all 0.3s ease;
 }

@@ -22,7 +22,7 @@ function NewExercises () {
 
         
 
-        axios.post('http://localhost:5001/exercise-list/add-exercise/', {Exercise: exercise, Equipment: equipment, Exercise_Type:exerciseType, Major_Muscle:majorMuscle, Minor_Muscle: minorMuscle, Example: example, Notes:notes, Modifications:modifications})
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/exercise-list/add-exercise`, {Exercise: exercise, Equipment: equipment, Exercise_Type:exerciseType, Major_Muscle:majorMuscle, Minor_Muscle: minorMuscle, Example: example, Notes:notes, Modifications:modifications})
         .then(result => {console.log(result)
         if(result.data=== "Exercise successfully created"){
           navigate('/exercise-list/')  
@@ -140,7 +140,7 @@ function NewExercises () {
                 </form>
             </div>
             <Link to="../exercise-list" style={{ textDecoration: 'none', color: 'black' }}>
-                <div className = "dashButton d-flex flex- justify-content-center align-items-center">
+                <div className = "dash-button d-flex flex- justify-content-center align-items-center">
                 <div> Exercise List </div>
                 </div>
             </Link>

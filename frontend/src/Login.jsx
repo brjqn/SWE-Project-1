@@ -19,7 +19,7 @@ function Login() {
             return;
         }
     
-        axios.post('http://localhost:5001/login', {email, password})
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, {email, password})
         .then(result => {
             console.log(result)
             if (result.data === "Success") {
@@ -33,6 +33,9 @@ function Login() {
             }
             else if (result.data === "Password is Incorrect") {
                 window.alert("Password is Incorrect");
+            }
+            else if (result.data === "Invalid email format") {
+                window.alert("Invalid email format");
             }
         })
         .catch(err => console.log(err))

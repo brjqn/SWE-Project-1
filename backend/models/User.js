@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const goalSchema = new mongoose.Schema({
     //Name of exercise in string format
@@ -11,7 +11,7 @@ const goalSchema = new mongoose.Schema({
     repetitions:{type: Number, required: false},
     //time it takes to complete exercise
     time:{type: Number, required: false}
-})
+});
 
 const UserSchema = new mongoose.Schema({
     name:{

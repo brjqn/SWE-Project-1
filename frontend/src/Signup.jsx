@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios'
 
+
 function Signup () {
     const [name, setName] = useState()
     const [email, setEmail] = useState()
@@ -17,10 +18,19 @@ function Signup () {
             return;
         }
     
-        axios.post('http://localhost:5001/register', { name, email, password })
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/register`, { name, email, password })
             .then(result => {
-                console.log(result);
-                navigate('/login');  // Redirect to login
+                if (result.data === "Success") {
+                    console.log(result);
+                    navigate('/login');
+                }
+                else if (result.data === "Email already exists") {
+                    window.alert("Email already exists");
+                }
+                else if (result.data === "Invalid email format") {
+                    window.alert("Invalid email format");
+                }
+                
             })
             .catch(err => {
                 if (err.response && err.response.status === 400) {

@@ -20,7 +20,7 @@ const DropDownComponent = () => {
     useEffect(() => {
         const fetchData = async() =>{
             try{
-                const response = await axios.get('http://localhost:5001/exercise-list/');
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/exercise-list`);
                 setAllData(response.data);
                 setFilteredData(response.data);
             }
@@ -167,7 +167,7 @@ const DropDownComponent = () => {
                 </div>
             </Link>
             <Link to="../dashboard" style={{ textDecoration: 'none', color: 'black' }}>
-                <div className = "dashButton d-flex flex- justify-content-center align-items-center">
+                <div className = "dash-button d-flex flex- justify-content-center align-items-center">
                 <span> Dashboard </span>
                 </div>
             </Link>

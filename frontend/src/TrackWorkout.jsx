@@ -17,7 +17,7 @@ function TrackWorkout () {
     useEffect(() => {
         const fetchData = async() =>{
             try{
-                const response = await axios.get('http://localhost:5001/track-workout');
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/track-workout`);
                 setExerciseList(response.data);
                 
             }
@@ -48,7 +48,7 @@ function TrackWorkout () {
         }
         
 
-        axios.post('http://localhost:5001/track-workout', {email: currentUser, ExerciseName:exerciseName, assigned_date: formattedDate, weight: numericWeight, repetitions: numericRepetitions, time: numericTime})
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/track-workout`, {email: currentUser, ExerciseName:exerciseName, assigned_date: formattedDate, weight: numericWeight, repetitions: numericRepetitions, time: numericTime})
         .then(result => {
             console.log(result);
             setExerciseName(''); 
@@ -58,7 +58,28 @@ function TrackWorkout () {
             setTime('');
         })
         .catch(err => console.log(err))
-    }
+    };
+    //alows users to download their goals
+    const handleDownload = async () => {
+        try {
+            //route is automatically handled by App.jsx
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/download-goals/${currentUser}`, {
+                responseType: 'blob', 
+            });
+
+            // Create a link element to link to csv file
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'user-goals.csv'); 
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        } catch (error) {
+            console.error("Error downloading goals:", error);
+            alert("Failed to download goals.");
+        }
+    };
 
     return (
         <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
@@ -145,10 +166,13 @@ function TrackWorkout () {
                 </form>
             </div>
             <Link to="../dashboard" style={{ textDecoration: 'none', color: 'black' }}>
-                <div className="dashButton d-flex flex- justify-content-center align-items-center">
+                <div className="dash-button d-flex flex- justify-content-center align-items-center">
                     <span>Dashboard</span>
-                </div>
+                </div>.
             </Link>
+            <button onClick={handleDownload} className="other-button">
+                    Download Goals as CSV
+                </button>
         </div>
     );
 }
