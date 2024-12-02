@@ -226,6 +226,36 @@ app.get('/download-goals/:email', async (req, res) => {
     }
 });
 
+// Middleware for authentication
+const authenticateUser = async (req, res, next) => {
+    let email;
+  
+    if (req.method === 'GET') {
+      email = req.query.email;
+    } else if (req.method === 'PUT' || req.method === 'POST') {
+      email = req.body.currentEmail;
+    }
+  
+    if (!email) {
+      return res.status(401).json({ message: 'Unauthorized. No email provided.' });
+    }
+    req.userEmail = email; // Attach the email to the request for use in routes
+    next();
+  };
+
+  app.get('/api/user/profile', authenticateUser, async (req, res) => {
+    try {
+      const user = await UserModel.findOne({ email: req.userEmail });
+      if (!user) {
+        return res.status(404).json({ message: 'User not found.' });
+      }
+      res.status(200).json({ name: user.name, email: user.email });
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      res.status(500).json({ message: 'Server error.' });
+    }
+  });
+
 // Update email
 app.put('/api/user/email', authenticateUser, async (req, res) => {
   const { currentEmail, newEmail, password } = req.body;
@@ -258,6 +288,7 @@ app.put('/api/user/email', authenticateUser, async (req, res) => {
     res.status(500).json({ message: 'Server error while updating email.' });
   }
 });
+
 
 // Route to update password
 app.put('/api/user/password', authenticateUser, async (req, res) => {
