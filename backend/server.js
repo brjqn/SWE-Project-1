@@ -1,50 +1,26 @@
-require('dotenv').config();
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const UserModel = require('./models/User');
-const ExercisesModel = require('./models/workout.models');
-const validator = require('validator');
-const { parse } = require('json2csv');
-  
-let corsOptions = {
-    origin: (origin, callback) => {
-        // Allow requests from 'http://localhost:5173' or requests with no origin (e.g., Postman)
-        if (!origin || origin.startsWith('http://localhost:5173')) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-};
-  
+const express = require("express")
+const mongoose = require("mongoose")
+const cors = require("cors")
+const UserModel = require('./models/User')
+const ExercisesModel = require('./models/workout.models')
 
-let app = express();
-app.use(express.json());
-app.use(cors(corsOptions)); //put back corsOptions
-app.disable('x-powered-by');
-const databaseURI = process.env.MONGO_URI;
-mongoose.connect(databaseURI)
+
+const app = express()
+app.use(express.json())
+app.use(cors())
+mongoose.connect("mongodb+srv://gitfit_user:GitFit123@workout-routines.r8hts.mongodb.net/users")
     .then(() => console.log("Database Exercise connected successfully"))
-    .catch(err => console.error("Database connection error:", err));
+    .catch(err => console.error("Database connection error:", err))
 
 app.post('/register', async (req, res) => {
-    //Block?
     const { name, email, password } = req.body;
-    // Validate and sanitize email to prevent NoSQL Injection
-    if (!email || !validator.isEmail(email)) {
-        return res.json("Invalid email format" );
-    }
-    // eslint-disable-next-line security/detect-object-injection
-    const sanitizedEmail = validator.normalizeEmail(email);
-    
 
     try {
          // Check if the email already exists in the database
          //needs collection users
-        const existingUser = await UserModel.findOne({ email: sanitizedEmail }).lean();
+        const existingUser = await UserModel.findOne({ email });
         if (existingUser) {
-            return res.json("Email already exists" );
+            return res.status(400).json({ message: "Email already exists" });
         }
 
         // If email doesn't exist, create the new user
@@ -61,51 +37,34 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    if(!req.body.email || !req.body.password){
-        return res.json("Email has not been registered");
-    }
-    if (!req.body.email || !validator.isEmail(req.body.email)) {
-        return res.json("Invalid email format" );
-    }
-    const sanitizedEmail = validator.normalizeEmail(req.body.email);
-    
-
-    try{
-      const user = await UserModel.findOne({ email: sanitizedEmail }).exec();
-        if (user) {
-            if (user.password === req.body.password) {
-                res.json("Success");
-            }
-            else {
-                res.json("Password is Incorrect");
-            }
+    const { email, password } = req.body;
+    const user = await UserModel.findOne({ email });
+    if (user) {
+        if (user.password === password) {
+            res.json("Success")
         }
         else {
-            res.json("Email has not been registered");
-        }  
+            res.json("Password is Incorrect")
+        }
     }
-    catch(err){
-        console.error("Database query error", err);
-        return res.status(500).json({error:"Internal server error"});
+    else {
+        res.json("Email has not been registered")
     }
-  });
-  
+});
 
 app.post('/exercise-list/add-exercise/', async (req,res) =>{
     //this is the post to populate the exercise data in the collection users
     //it adds to the schema and posts to mongodb
-    const {Exercise, Equipment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications} = req.body;
-    let query = {
-        Exercise:req.body.Exercise.toString().trim(),
-    };
+    const {Exercise, Equiptment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications, User_Made} = req.body;
+
     try{
-        const existingExercise = await ExercisesModel.findOne(query).exec();
+        const existingExercise = await ExercisesModel.findOne({Exercise});
         if (existingExercise) {
-            return res.json("Exercise already exists" );
+            return res.status(400).json({ message: "Exercise already exists" });
         }
-        const newExercise = new ExercisesModel({ Exercise, Equipment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications, User_Made:true});
+        const newExercise = new ExercisesModel({ Exercise, Equiptment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications, User_Made:true});
         await newExercise.save();
-        return res.json("Exercise successfully created");
+        return res.status(201).json({ message: "Exercise successfully created" });
 
     }
     catch(error){
@@ -140,17 +99,10 @@ app.get('/track-workout', async (req, res) => {
 
 app.post('/track-workout', async (req, res)=>{
     //this is to create a goal underneath of the users schema
-    const {ExerciseName, assigned_date, weight, repetitions, time} = req.body;
+    const {email, ExerciseName, assigned_date, weight, repetitions, time} = req.body;
     try{
-        if (!req.body.email || !validator.isEmail(req.body.email)) {
-            return res.json("Invalid email format" );
-        }
-        const sanitizedEmail = validator.normalizeEmail(req.body.email);
-
-        let query = { email: sanitizedEmail};
-    
         const addGoal = await UserModel.findOneAndUpdate(
-            query,
+            {email},
             {
                 $push:{
                     goalArray:{
@@ -163,7 +115,7 @@ app.post('/track-workout', async (req, res)=>{
                 }
             },
             {new: true}
-        ).exec();
+        );
         if(!addGoal){
             return res.status(404).json({message:"User not found"});
         }
@@ -173,127 +125,8 @@ app.post('/track-workout', async (req, res)=>{
         console.error("Error adding goal:", error);
         return res.status(500).json({message:"Server error"});
     }
-});
-
-app.get('/download-goals/:email', async (req, res) => {
-
-    try {
-        const { email } = req.params;
-
-        if (!validator.isEmail(email)) {
-            return res.status(400).json({ message: 'Invalid email format' });
-        }
-
-        const user = await UserModel.findOne({ email });
-
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        if (!user.goalArray || user.goalArray.length === 0) {
-            return res.status(404).json({ message: 'No goals found for this user' });
-        }
-
-        // defines the headers for csv file
-        const fields = [
-            'ExerciseName', // This will be mapped to 'Exercise Name'
-            'assigned_date', 
-            'weight', 
-            'repetitions', 
-            'time' 
-        ];
-
-        // Map goalArray to match header format
-        const mappedGoals = user.goalArray.map(goal => ({
-            ExerciseName: goal.ExerciseName,
-            assigned_date: goal.assigned_date,
-            weight: goal.weight || '', // Default to empty string if undefined
-            repetitions: goal.repetitions || '', 
-            time: goal.time || '' 
-        }));
-
-        // Convert the mapped goals to CSV
-        const csv = parse(mappedGoals, { fields});
-        const buffer = Buffer.from(csv, 'utf-8');
-
-        res.setHeader('Content-Type', 'text/csv');
-        res.setHeader('Content-Disposition', 'attachment; filename=goals.csv');
-        res.send(buffer);
-
-    } catch (error) {
-        console.error('Error fetching user goals:', error);
-        res.status(500).json({ message: 'Server error', error: error.message });
-    }
-});
-
-// Update email
-app.put('/api/user/email', authenticateUser, async (req, res) => {
-  const { currentEmail, newEmail, password } = req.body;
-
-  // Ensure the currentEmail matches the authenticated user's email
-  if (currentEmail !== req.userEmail) {
-    return res.status(403).json({ message: 'Account not found.' });
-  }
-
-  try {
-    // Find user by current email
-    const user = await UserModel.findOne({ email: currentEmail });
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found.' });
-    }
-
-    // Verify the provided password
-    if (user.password !== password) {
-      return res.status(400).json({ message: 'Incorrect password.' });
-    }
-
-    // Update the email
-    user.email = newEmail;
-    await user.save();
-
-    res.status(200).json({ message: 'Email updated successfully!' });
-  } catch (error) {
-    console.error('Error updating email:', error);
-    res.status(500).json({ message: 'Server error while updating email.' });
-  }
-});
-
-// Route to update password
-app.put('/api/user/password', authenticateUser, async (req, res) => {
-  const { currentEmail, oldPassword, newPassword } = req.body;
-
-  // Ensure the currentEmail matches the authenticated user's email
-  if (currentEmail !== req.userEmail) {
-    return res.status(403).json({ message: 'Account not found.' });
-  }
-
-  try {
-    // Find user by email
-    const user = await UserModel.findOne({ email: currentEmail });
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found.' });
-    }
-
-    // Verify the old password
-    if (user.password !== oldPassword) {
-      return res.status(400).json({ message: 'Incorrect old password.' });
-    }
-
-    // Update the password
-    user.password = newPassword; // Ensure you hash the password in production
-    await user.save();
-
-    res.status(200).json({ message: 'Password updated successfully!' });
-  } catch (error) {
-    console.error('Error updating password:', error);
-    res.status(500).json({ message: 'Server error while updating password.' });
-  }
-});
-  
-  
+})
 
 app.listen(5001, () => {
-    console.log("server is running");
+    console.log("server is running")
 })

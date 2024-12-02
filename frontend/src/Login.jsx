@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 import {UserContext} from './UserContext';
@@ -19,7 +20,7 @@ function Login() {
             return;
         }
     
-        axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, {email, password})
+        axios.post('http://localhost:5001/login', {email, password})
         .then(result => {
             console.log(result)
             if (result.data === "Success") {
@@ -33,9 +34,6 @@ function Login() {
             }
             else if (result.data === "Password is Incorrect") {
                 window.alert("Password is Incorrect");
-            }
-            else if (result.data === "Invalid email format") {
-                window.alert("Invalid email format");
             }
         })
         .catch(err => console.log(err))
