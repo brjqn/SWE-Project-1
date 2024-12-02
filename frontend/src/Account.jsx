@@ -19,7 +19,9 @@ const Account = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get('/api/user/profile', {
+
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/profile`, {
+
           params: {
             email: currentUser,
           },
@@ -37,7 +39,7 @@ const Account = () => {
 
   const handleEmailUpdate = async () => {
     try {
-      const response = await axios.put('/api/user/email', {
+      const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/user/email`, {
         currentEmail: emailUpdateData.currentEmail,
         newEmail: emailUpdateData.newEmail,
         password: emailUpdateData.password,
