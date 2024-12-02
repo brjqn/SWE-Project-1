@@ -167,7 +167,7 @@ const DropDownComponent = () => {
                 </div>
             </Link>
             <Link to="../dashboard" style={{ textDecoration: 'none', color: 'black' }}>
-                <div className = "dashButton d-flex flex- justify-content-center align-items-center">
+                <div className = "dash-button d-flex flex- justify-content-center align-items-center">
                 <span> Dashboard </span>
                 </div>
             </Link>

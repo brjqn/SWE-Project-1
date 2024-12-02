@@ -22,10 +22,9 @@ mongoose.connect(databaseURI)
     .catch(err => console.error("Database connection error:", err));
 
 app.post('/register', async (req, res) => {
+    //Block?
     const { name, email, password } = req.body;
-    let query = {
-        email:req.body.email.toString().trim(),
-    };
+    let query = {email:req.body.email.toString().trim()};
 
     try {
          // Check if the email already exists in the database

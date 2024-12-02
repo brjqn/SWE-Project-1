@@ -140,7 +140,7 @@ function NewExercises () {
                 </form>
             </div>
             <Link to="../exercise-list" style={{ textDecoration: 'none', color: 'black' }}>
-                <div className = "dashButton d-flex flex- justify-content-center align-items-center">
+                <div className = "dash-button d-flex flex- justify-content-center align-items-center">
                 <div> Exercise List </div>
                 </div>
             </Link>
