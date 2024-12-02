@@ -9,7 +9,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import TrackWorkout from './TrackWorkout';
 import {UserProvider} from './UserContext';
 import ProtectedRoute from "./ProtectedRoute";
-
+import Account from './Account'; 
 
 function App() {
   return (
@@ -50,6 +50,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <TrackWorkout />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path='/account' 
+            element={
+              <ProtectedRoute>
+                <Account />
               </ProtectedRoute>
             } 
           />

@@ -6,11 +6,16 @@ const UserModel = require('./models/User');
 const ExercisesModel = require('./models/workout.models');
 const validator = require('validator');
 const { parse } = require('json2csv');
-
+  
 let corsOptions = {
     origin: (origin, callback) => {
-        origin?.startsWith('http://localhost:5173') ? callback(null, true) : callback(new Error('Not allowed by CORS'));
-    }
+        // Allow requests from 'http://localhost:5173' or requests with no origin (e.g., Postman)
+        if (!origin || origin.startsWith('http://localhost:5173')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
 };
   
 
@@ -83,8 +88,8 @@ app.post('/login', async (req, res) => {
         console.error("Database query error", err);
         return res.status(500).json({error:"Internal server error"});
     }
-    
-});
+  });
+  
 
 app.post('/exercise-list/add-exercise/', async (req,res) =>{
     //this is the post to populate the exercise data in the collection users
@@ -220,6 +225,74 @@ app.get('/download-goals/:email', async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 });
+
+// Update email
+app.put('/api/user/email', authenticateUser, async (req, res) => {
+  const { currentEmail, newEmail, password } = req.body;
+
+  // Ensure the currentEmail matches the authenticated user's email
+  if (currentEmail !== req.userEmail) {
+    return res.status(403).json({ message: 'Account not found.' });
+  }
+
+  try {
+    // Find user by current email
+    const user = await UserModel.findOne({ email: currentEmail });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // Verify the provided password
+    if (user.password !== password) {
+      return res.status(400).json({ message: 'Incorrect password.' });
+    }
+
+    // Update the email
+    user.email = newEmail;
+    await user.save();
+
+    res.status(200).json({ message: 'Email updated successfully!' });
+  } catch (error) {
+    console.error('Error updating email:', error);
+    res.status(500).json({ message: 'Server error while updating email.' });
+  }
+});
+
+// Route to update password
+app.put('/api/user/password', authenticateUser, async (req, res) => {
+  const { currentEmail, oldPassword, newPassword } = req.body;
+
+  // Ensure the currentEmail matches the authenticated user's email
+  if (currentEmail !== req.userEmail) {
+    return res.status(403).json({ message: 'Account not found.' });
+  }
+
+  try {
+    // Find user by email
+    const user = await UserModel.findOne({ email: currentEmail });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // Verify the old password
+    if (user.password !== oldPassword) {
+      return res.status(400).json({ message: 'Incorrect old password.' });
+    }
+
+    // Update the password
+    user.password = newPassword; // Ensure you hash the password in production
+    await user.save();
+
+    res.status(200).json({ message: 'Password updated successfully!' });
+  } catch (error) {
+    console.error('Error updating password:', error);
+    res.status(500).json({ message: 'Server error while updating password.' });
+  }
+});
+  
+  
 
 app.listen(5001, () => {
     console.log("server is running");
