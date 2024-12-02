@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server'); //Need to install this using the command for test to work on your machine: npm install --save-dev mongodb-memory-server 
 const User = require('../models/User'); // Adjust the path if needed
-const faker = require('faker'); //get faker for passwords
+const { faker } = require('@faker-js/faker'); //get faker for passwords
 
 let mongoServer;
 
@@ -20,7 +20,7 @@ describe('Suite for User Model Unit Testing', () => {
     test('Create/Save Valid User', async () => { // Creates and saves a valid user.
         // Use faker to generate random test data
         const validUser = new User({
-          name: faker.name.firstName(),               // Random first name
+          name: faker.person.firstName(),               // Random first name
           email: faker.internet.email(),              // Random email
           password: faker.internet.password(),        // Random password
         });
