@@ -58,7 +58,28 @@ function TrackWorkout () {
             setTime('');
         })
         .catch(err => console.log(err))
-    }
+    };
+    //alows users to download their goals
+    const handleDownload = async () => {
+        try {
+            //route is automatically handled by App.jsx
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/download-goals/${currentUser}`, {
+                responseType: 'blob', 
+            });
+
+            // Create a link element to link to csv file
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'user-goals.csv'); 
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        } catch (error) {
+            console.error("Error downloading goals:", error);
+            alert("Failed to download goals.");
+        }
+    };
 
     return (
         <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
@@ -149,6 +170,9 @@ function TrackWorkout () {
                     <span>Dashboard</span>
                 </div>.
             </Link>
+            <button onClick={handleDownload} className="other-button">
+                    Download Goals as CSV
+                </button>
         </div>
     );
 }

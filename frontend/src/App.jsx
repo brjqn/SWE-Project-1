@@ -53,7 +53,6 @@ function App() {
               </ProtectedRoute>
             } 
           />
-          
           {/* Default Route */}
           <Route path='/' element={<Signup />} />
         </Routes>
