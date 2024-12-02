@@ -20,7 +20,7 @@ const DropDownComponent = () => {
     useEffect(() => {
         const fetchData = async() =>{
             try{
-                const response = await axios.get('http://localhost:5001/exercise-list/');
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/exercise-list`);
                 setAllData(response.data);
                 setFilteredData(response.data);
             }
