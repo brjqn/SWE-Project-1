@@ -27,6 +27,9 @@ function Signup () {
                 else if (result.data === "Email already exists") {
                     window.alert("Email already exists");
                 }
+                else if (result.data === "Invalid email format") {
+                    window.alert("Invalid email format");
+                }
                 
             })
             .catch(err => {

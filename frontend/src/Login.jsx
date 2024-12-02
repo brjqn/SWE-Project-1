@@ -35,6 +35,9 @@ function Login() {
             else if (result.data === "Password is Incorrect") {
                 window.alert("Password is Incorrect");
             }
+            else if (result.data === "Invalid email format") {
+                window.alert("Invalid email format");
+            }
         })
         .catch(err => console.log(err))
     };

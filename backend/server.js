@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const UserModel = require('./models/User');
 const ExercisesModel = require('./models/workout.models');
+const validator = require('validator');
 
 let corsOptions = {
     origin: (origin, callback) => {
@@ -24,7 +25,11 @@ mongoose.connect(databaseURI)
 app.post('/register', async (req, res) => {
     //Block?
     const { name, email, password } = req.body;
-    let query = {email:req.body.email.toString().trim()};
+    if (!email || !validator.isEmail(email)) {
+        return res.json("Invalid email format" );
+    }
+    const sanitizedEmail = validator.normalizeEmail(email);
+    let query = { email: sanitizedEmail };
 
     try {
          // Check if the email already exists in the database
@@ -51,9 +56,12 @@ app.post('/login', async (req, res) => {
     if(!req.body.email || !req.body.password){
         return res.json("Email has not been registered");
     }
-    let query = {
-        email:req.body.email.toString().trim(),
-    };
+    if (!req.body.email || !validator.isEmail(req.body.email)) {
+        return res.json("Invalid email format" );
+    }
+    const sanitizedEmail = validator.normalizeEmail(req.body.email);
+    let query = { email: sanitizedEmail };
+
     try{
       const user = await UserModel.findOne(query).exec();
         if (user) {
