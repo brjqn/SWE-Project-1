@@ -16,7 +16,7 @@ let corsOptions = {
 
 let app = express();
 app.use(express.json());
-app.use(cors()); //put back corsOptions
+app.use(cors(corsOptions)); //put back corsOptions
 app.disable('x-powered-by');
 const databaseURI = process.env.MONGO_URI;
 mongoose.connect(databaseURI)

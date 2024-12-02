@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 import {UserContext} from './UserContext';
-//require('dotenv').config();
 
 function Login() {
     const [email, setEmail] = useState()
