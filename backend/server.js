@@ -31,7 +31,7 @@ app.post('/register', async (req, res) => {
          //needs collection users
         const existingUser = await UserModel.findOne(query).exec();
         if (existingUser) {
-            return res.status(400).json({ message: "Email already exists" });
+            return res.json("Email already exists" );
         }
 
         // If email doesn't exist, create the new user

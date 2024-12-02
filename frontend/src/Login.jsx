@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
 import {UserContext} from './UserContext';
-require('dotenv').config();
+//require('dotenv').config();
 
 function Login() {
     const [email, setEmail] = useState()
@@ -20,7 +20,7 @@ function Login() {
             return;
         }
     
-        axios.post('${process.env.BACKEND_URL}/login', {email, password})
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, {email, password})
         .then(result => {
             console.log(result)
             if (result.data === "Success") {

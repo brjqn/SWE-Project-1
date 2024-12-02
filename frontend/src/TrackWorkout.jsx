@@ -17,7 +17,7 @@ function TrackWorkout () {
     useEffect(() => {
         const fetchData = async() =>{
             try{
-                const response = await axios.get('http://localhost:5001/track-workout');
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/track-workout`);
                 setExerciseList(response.data);
                 
             }
@@ -48,7 +48,7 @@ function TrackWorkout () {
         }
         
 
-        axios.post('http://localhost:5001/track-workout', {email: currentUser, ExerciseName:exerciseName, assigned_date: formattedDate, weight: numericWeight, repetitions: numericRepetitions, time: numericTime})
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/track-workout`, {email: currentUser, ExerciseName:exerciseName, assigned_date: formattedDate, weight: numericWeight, repetitions: numericRepetitions, time: numericTime})
         .then(result => {
             console.log(result);
             setExerciseName(''); 
