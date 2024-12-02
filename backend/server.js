@@ -134,9 +134,12 @@ app.post('/track-workout', async (req, res)=>{
     //this is to create a goal underneath of the users schema
     const {ExerciseName, assigned_date, weight, repetitions, time} = req.body;
     try{
-        let query = {
-            email:req.body.email.toString().trim(),
-        };
+        if (!req.body.email || !validator.isEmail(req.body.email)) {
+            return res.json("Invalid email format" );
+        }
+        const sanitizedEmail = validator.normalizeEmail(req.body.email);
+        let query = { email: sanitizedEmail };
+    
         const addGoal = await UserModel.findOneAndUpdate(
             query,
             {
