@@ -1,0 +1,48 @@
+/* Account page container */
+.account-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+  }
+  
+  /* Form container */
+  .form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Form group styling */
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    font-weight: bold;
+  }
+  
+  .form-control {
+    border-radius: 5px;
+  }
+  
+  /* Save changes button */
+  .btn-success {
+    width: 100%;
+    background-color: #1c592c;
+    border: none;
+  }
+  
+  .btn-success:hover {
+    background-color: #144d24;
+  }
+  
+  /* Message styling */
+  .message {
+    text-align: center;
+    font-weight: bold;
+    color: green;
+  }
+  
