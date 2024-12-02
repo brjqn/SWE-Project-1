@@ -1,24 +1,37 @@
+require('dotenv').config();
 const express = require("express")
 const mongoose = require("mongoose")
 const cors = require("cors")
 const UserModel = require('./models/User')
 const ExercisesModel = require('./models/workout.models')
 
+let corsOptions = {
+    origin: (origin, callback) => {
+        origin?.startsWith('http://localhost:5173') ? callback(null, true) : callback(new Error('Not allowed by CORS'));
+    }
+};
+  
 
-const app = express()
+let app = express();
 app.use(express.json())
-app.use(cors())
-mongoose.connect("mongodb+srv://gitfit_user:GitFit123@workout-routines.r8hts.mongodb.net/users")
+app.use(cors(corsOptions))
+app.disable('x-powered-by');
+const databaseURI = process.env.MONGO_URI;
+mongoose.connect(databaseURI)
     .then(() => console.log("Database Exercise connected successfully"))
     .catch(err => console.error("Database connection error:", err))
 
 app.post('/register', async (req, res) => {
     const { name, email, password } = req.body;
 
+    let query = {
+        email:req.body.email.toString().trim(),
+    };
+
     try {
          // Check if the email already exists in the database
          //needs collection users
-        const existingUser = await UserModel.findOne({ email });
+        const existingUser = await UserModel.findOne(query).exec();
         if (existingUser) {
             return res.status(400).json({ message: "Email already exists" });
         }
@@ -37,34 +50,48 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    const user = await UserModel.findOne({ email });
-    if (user) {
-        if (user.password === password) {
-            res.json("Success")
+    if(!req.body.email || !req.body.password){
+        return res.json("Email has not been registered")
+    }
+    let query = {
+        email:req.body.email.toString().trim(),
+    };
+    try{
+      const user = await UserModel.findOne(query).exec();
+        if (user) {
+            if (user.password === req.body.password) {
+                res.json("Success")
+            }
+            else {
+                res.json("Password is Incorrect")
+            }
         }
         else {
-            res.json("Password is Incorrect")
-        }
+            res.json("Email has not been registered")
+        }  
     }
-    else {
-        res.json("Email has not been registered")
+    catch(err){
+        console.error("Database query error", err);
+        return res.status(500).json({error:"Internal server error"});
     }
+    
 });
 
 app.post('/exercise-list/add-exercise/', async (req,res) =>{
     //this is the post to populate the exercise data in the collection users
     //it adds to the schema and posts to mongodb
-    const {Exercise, Equiptment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications, User_Made} = req.body;
-
+    const {Exercise, Equipment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications} = req.body;
+    let query = {
+        Exercise:req.body.Exercise.toString().trim(),
+    };
     try{
-        const existingExercise = await ExercisesModel.findOne({Exercise});
+        const existingExercise = await ExercisesModel.findOne(query).exec();
         if (existingExercise) {
-            return res.status(400).json({ message: "Exercise already exists" });
+            return res.json("Exercise already exists" );
         }
-        const newExercise = new ExercisesModel({ Exercise, Equiptment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications, User_Made:true});
+        const newExercise = new ExercisesModel({ Exercise, Equipment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications, User_Made:true});
         await newExercise.save();
-        return res.status(201).json({ message: "Exercise successfully created" });
+        return res.json("Exercise successfully created");
 
     }
     catch(error){
@@ -99,10 +126,13 @@ app.get('/track-workout', async (req, res) => {
 
 app.post('/track-workout', async (req, res)=>{
     //this is to create a goal underneath of the users schema
-    const {email, ExerciseName, assigned_date, weight, repetitions, time} = req.body;
+    const {ExerciseName, assigned_date, weight, repetitions, time} = req.body;
     try{
+        let query = {
+            email:req.body.email.toString().trim(),
+        };
         const addGoal = await UserModel.findOneAndUpdate(
-            {email},
+            query,
             {
                 $push:{
                     goalArray:{
@@ -115,7 +145,7 @@ app.post('/track-workout', async (req, res)=>{
                 }
             },
             {new: true}
-        );
+        ).exec();
         if(!addGoal){
             return res.status(404).json({message:"User not found"});
         }

@@ -49,56 +49,68 @@ function Dashboard() {
           {/* Track Workout Card */}
           <div className="col-md-5 mb-4">
             <div 
-              className="card h-100 clickable-card"
+              className="card h-100 clickable-card">
+              <button
+              className="btn btn-link p-0 border-0 text-decoration-none"
               onClick={() => handleNavigation('/track-workout')} // Handle click event
-              style={{ cursor: 'pointer' }}
-            >
-              <div className="card-body text-center">
+              style={{ cursor: 'pointer', color: "black" }}
+              >
+              
                 <h3>Track Workout</h3>
                 <p>Record your workout progress.</p>
-              </div>
+              </button>
             </div>
           </div>
 
           {/* Graph Progress Card */}
           <div className="col-md-5 mb-4">
             <div 
-              className="card h-100 clickable-card"
+              className="card h-100 clickable-card">
+              <button
+              className="btn btn-link p-0 border-0 text-decoration-none"
               onClick={() => handleNavigation('/graph-progress')} // Handle click event
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', color: "black" }}
             >
-              <div className="card-body text-center">
+              
                 <h3>Graph Progress</h3>
                 <p>Visualize your workout trends over time.</p>
-              </div>
+              </button>
             </div>
           </div>
 
           {/* Exercise List Card */}
           <div className="col-md-5 mb-4">
             <div 
-              className="card h-100 clickable-card"
+              className="card h-fit-content clickable-card">
+                <button
+                className="btn btn-link p-0 border-0 text-decoration-none"
               onClick={() => handleNavigation('/exercise-list')} // Handle click event
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', color: "black" }}
             >
-              <div className="card-body text-center">
+              
                 <h3>Exercise List</h3>
                 <p>Browse exercises.</p>
-              </div>
+              </button>
             </div>
           </div>
 
           {/* Milestones Card */}
           <div className="col-md-5 mb-4">
             <div 
-              className="card h-100 clickable-card"
+              className="card h-rit-content clickable-card">
+              <button
+              className="btn btn-link p-0 border-0 text-decoration-none"
               onClick={() => handleNavigation('/milestones')} // Handle click event
-              style={{ cursor: 'pointer' }}
-            >
-              <div className="card-body text-center">
-                <h3>Milestones</h3>
-                <p>Track and celebrate your fitness milestones.</p>
-              </div>
+              style={{ cursor: 'pointer', color:"black" }}  
+              >
+              <h3>Milestones</h3>
+                <p>Track and celebrate your fitness milestones.</p>  
+              </button>
+              
+            
+              
+                
+              
             </div>
           </div>
         </div>

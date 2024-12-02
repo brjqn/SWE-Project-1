@@ -1,19 +1,18 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios'
-import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './General.css';
 //this file just adds an exercise using the workout.models' exercise schema
 function NewExercises () {
-    const [Exercise, setExercise] = useState()
-    const [Equiptment, setEquiptment] = useState()
-    const [Exercise_Type, setExercise_Type] = useState()
-    const [Major_Muscle, setMajor_Muscle] = useState()
-    const [Minor_Muscle, setMinor_Muscle] = useState()
-    const [Example, setExample] = useState()
-    const [Notes, setNotes] = useState()
-    const [Modifications, setModifications] = useState()
+    const [exercise, setExercise] = useState('');  
+    const [equipment, setEquipment] = useState(''); 
+    const [exerciseType, setExerciseType] = useState(''); 
+    const [majorMuscle, setMajorMuscle] = useState(''); 
+    const [minorMuscle, setMinorMuscle] = useState(''); 
+    const [example, setExample] = useState(''); 
+    const [notes, setNotes] = useState(''); 
+    const [modifications, setModifications] = useState('');
     
     
     const navigate = useNavigate()
@@ -23,9 +22,15 @@ function NewExercises () {
 
         
 
-        axios.post('http://localhost:5001/exercise-list/add-exercise/', {Exercise, Equiptment, Exercise_Type, Major_Muscle, Minor_Muscle, Example, Notes, Modifications})
+        axios.post('http://localhost:5001/exercise-list/add-exercise/', {Exercise: exercise, Equipment: equipment, Exercise_Type:exerciseType, Major_Muscle:majorMuscle, Minor_Muscle: minorMuscle, Example: example, Notes:notes, Modifications:modifications})
         .then(result => {console.log(result)
-        navigate('/exercise-list/')
+        if(result.data=== "Exercise successfully created"){
+          navigate('/exercise-list/')  
+        }
+        else if (result.data === "Exercise already exists") {
+            window.alert("Exercise already exists");
+        }
+        
         })
         .catch(err => console.log(err))
     }
@@ -51,15 +56,15 @@ function NewExercises () {
                 </div>
                 <div className="mb-2">
                     <label htmlFor="email">
-                        <strong>Equiptment*</strong>
+                        <strong>Equipment*</strong>
                     </label>
                     <input
                         
-                        placeholder="Enter Equiptment Name"
+                        placeholder="Enter Equipment Name"
                         autoComplete="off"
                         type="text"
                         className="form-control rounded-0"
-                        onChange={(e) => setEquiptment(e.target.value)}
+                        onChange={(e) => setEquipment(e.target.value)}
                     />
                 </div>
                 <div className="mb-2">
@@ -71,7 +76,7 @@ function NewExercises () {
                         placeholder="Enter Exercise Type"
                         type="text"
                         className="form-control rounded-0"
-                        onChange={(e) => setExercise_Type(e.target.value)}
+                        onChange={(e) => setExerciseType(e.target.value)}
                     />
                 </div>
                 <div className="mb-2">
@@ -82,7 +87,7 @@ function NewExercises () {
                         placeholder="Enter Major Muscle"
                         type="text"
                         className="form-control rounded-0"
-                        onChange={(e) => setMajor_Muscle(e.target.value)}
+                        onChange={(e) => setMajorMuscle(e.target.value)}
                     />
                 </div>
                 <div className="mb-2">
@@ -93,7 +98,7 @@ function NewExercises () {
                         placeholder="Enter Minor Muscle"
                         type="text"
                         className="form-control rounded-0"
-                        onChange={(e) => setMinor_Muscle(e.target.value)}
+                        onChange={(e) => setMinorMuscle(e.target.value)}
                     />
                 </div>
                 <div className="mb-2">
@@ -136,7 +141,7 @@ function NewExercises () {
             </div>
             <Link to="../exercise-list" style={{ textDecoration: 'none', color: 'black' }}>
                 <div className = "dashButton d-flex flex- justify-content-center align-items-center">
-                <label> Exercise List </label>
+                <div> Exercise List </div>
                 </div>
             </Link>
         </div>

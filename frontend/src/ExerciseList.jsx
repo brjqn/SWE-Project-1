@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import axios from 'axios'
-import { useNavigate } from "react-router-dom";
 import React, {useState, useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './General.css';
@@ -100,7 +99,7 @@ const DropDownComponent = () => {
                     }}
                 />
                 <div className="box1 justify-content-center">
-                    <label> Suggested Exercise: </label>
+                    <span> Suggested Exercise: </span>
                     <span>{searchText}</span>   
                     <span>{suggestion.slice(searchText.length)}</span>
                 </div>
@@ -155,21 +154,21 @@ const DropDownComponent = () => {
             </div>
             <Link to="../track-workout" style={{ textDecoration: 'none', color: 'black' }}>
                 <div className = "box2 d-flex flex-column justify-content-center align-items-center">
-                <label>Add exercise to workout </label>
+                <span>Add exercise to workout </span>
                 
                 
                 </div>
             </Link>
             <Link to="./add-exercise" style={{ textDecoration: 'none', color: 'black' }}>
                 <div className = "box2 d-flex flex- justify-content-center align-items-center">
-                <label>Add New Exercise </label>
+                <span>Add New Exercise </span>
                 
                 
                 </div>
             </Link>
             <Link to="../dashboard" style={{ textDecoration: 'none', color: 'black' }}>
                 <div className = "dashButton d-flex flex- justify-content-center align-items-center">
-                <label> Dashboard </label>
+                <span> Dashboard </span>
                 </div>
             </Link>
     </div>

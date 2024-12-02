@@ -1,14 +1,13 @@
 import { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios'
-import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './General.css';
 import { UserContext } from "./UserContext";
 
 function TrackWorkout () {
-    const [ExerciseName, setName] = useState()
-    const [assigned_date, setDate] = useState()  
+    const [exerciseName, setExerciseName] = useState()
+    const [assignedDate, setAssignedDate] = useState()  
     const [weight, setWeight] = useState()
     const [repetitions, setRepetitions] = useState()  
     const [time, setTime] = useState()  
@@ -30,7 +29,7 @@ function TrackWorkout () {
     }, []);
 
     const handleSelectChange = (event) => {
-        setName(event.target.value);
+        setExerciseName(event.target.value);
     };
 
     const handleSubmit = (e) => {
@@ -40,24 +39,20 @@ function TrackWorkout () {
         const numericWeight = parseFloat(weight);
         const numericRepetitions = parseInt(repetitions, 10);
         const numericTime = parseFloat(time);
-        const formattedDate = new Date(assigned_date); 
+        const formattedDate = new Date(assignedDate); 
 
         
-        if (!currentUser) {
-            alert("Please log in to track your workout.");
-            return;
-        }
-        if (!ExerciseName) {
+        if (!exerciseName) {
             alert("Please enter an exercise name.");
             return;
         }
         
 
-        axios.post('http://localhost:5001/track-workout', {email: currentUser, ExerciseName, assigned_date: formattedDate, weight: numericWeight, repetitions: numericRepetitions, time: numericTime})
+        axios.post('http://localhost:5001/track-workout', {email: currentUser, ExerciseName:exerciseName, assigned_date: formattedDate, weight: numericWeight, repetitions: numericRepetitions, time: numericTime})
         .then(result => {
             console.log(result);
-            setName(''); 
-            setDate(''); 
+            setExerciseName(''); 
+            setAssignedDate(''); 
             setWeight(''); 
             setRepetitions('');
             setTime('');
@@ -76,7 +71,7 @@ function TrackWorkout () {
                         </label>
                         <select
                             id="dropdown"
-                            value={ExerciseName}
+                            value={exerciseName}
                             onChange={handleSelectChange}
                             className="form-control rounded-0"
                         >
@@ -89,15 +84,15 @@ function TrackWorkout () {
                         </select>
                     </div>
                     <div className="mb-2">
-                        <label htmlFor="assigned_date">
+                        <label htmlFor="assignedDate">
                             <strong>Date*</strong>
                         </label>
                         <input
                             type="date" 
                             placeholder="Select Date"
-                            value = {assigned_date}
+                            value = {assignedDate}
                             className="form-control rounded-0"
-                            onChange={(e) => setDate(e.target.value)}
+                            onChange={(e) => setAssignedDate(e.target.value)}
                         />
                     </div>
                     <div className="mb-2">
@@ -149,14 +144,9 @@ function TrackWorkout () {
                     </button>
                 </form>
             </div>
-            <Link to="../login" style={{ textDecoration: 'none', color: 'black' }}>
-                <div className="otherButton d-flex flex- justify-content-center align-items-center">
-                    <label>Login</label>
-                </div>
-            </Link>
             <Link to="../dashboard" style={{ textDecoration: 'none', color: 'black' }}>
                 <div className="dashButton d-flex flex- justify-content-center align-items-center">
-                    <label>Dashboard</label>
+                    <span>Dashboard</span>
                 </div>
             </Link>
         </div>
