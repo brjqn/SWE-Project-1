@@ -25,15 +25,18 @@ mongoose.connect(databaseURI)
 app.post('/register', async (req, res) => {
     //Block?
     const { name, email, password } = req.body;
+    // Validate and sanitize email to prevent NoSQL Injection
     if (!email || !validator.isEmail(email)) {
         return res.json("Invalid email format" );
     }
+    // eslint-disable-next-line security/detect-object-injection
     const sanitizedEmail = validator.normalizeEmail(email);
+    
 
     try {
          // Check if the email already exists in the database
          //needs collection users
-        const existingUser = await UserModel.findOne({ email: sanitizedEmail }).exec();
+        const existingUser = await UserModel.findOne({ email: sanitizedEmail }).lean();
         if (existingUser) {
             return res.json("Email already exists" );
         }
