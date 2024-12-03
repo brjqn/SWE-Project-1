@@ -33,32 +33,43 @@ function TrackWorkout () {
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-
-        
+        e.preventDefault();
+    
         const numericWeight = parseFloat(weight);
         const numericRepetitions = parseInt(repetitions, 10);
         const numericTime = parseFloat(time);
-        const formattedDate = new Date(assignedDate); 
-
-        
+        const formattedDate = new Date(assignedDate);
+    
         if (!exerciseName) {
             alert("Please enter an exercise name.");
             return;
         }
-        
-
-        axios.post(`${import.meta.env.VITE_BACKEND_URL}/track-workout`, {email: currentUser, ExerciseName:exerciseName, assigned_date: formattedDate, weight: numericWeight, repetitions: numericRepetitions, time: numericTime})
-        .then(result => {
-            console.log(result);
-            setExerciseName(''); 
-            setAssignedDate(''); 
-            setWeight(''); 
+    
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/track-workout`, {
+            email: currentUser,
+            ExerciseName: exerciseName,
+            assigned_date: formattedDate,
+            weight: numericWeight,
+            repetitions: numericRepetitions,
+            time: numericTime,
+        })
+        .then((response) => {
+            console.log(response);
+            setExerciseName('');
+            setAssignedDate('');
+            setWeight('');
             setRepetitions('');
             setTime('');
+    
+            // Show success alert after a successful response
+            alert(response.data.message);
         })
-        .catch(err => console.log(err))
-    };
+        .catch((error) => {
+            console.error('Error adding goal:', error);
+            alert('Failed to add goal. Please try again.');
+        });
+    };    
+
     //alows users to download their goals
     const handleDownload = async () => {
         try {
@@ -106,7 +117,7 @@ function TrackWorkout () {
                     </div>
                     <div className="mb-2">
                         <label htmlFor="assignedDate">
-                            <strong>Date*</strong>
+                            <strong>Date to Be Completed By*</strong>
                         </label>
                         <input
                             type="date" 
@@ -114,11 +125,12 @@ function TrackWorkout () {
                             value = {assignedDate}
                             className="form-control rounded-0"
                             onChange={(e) => setAssignedDate(e.target.value)}
+                            required={true}
                         />
                     </div>
                     <div className="mb-2">
                         <label htmlFor="weight">
-                            <strong>Weight</strong>
+                            <strong>Weight (lbs)</strong>
                         </label>
                         <input
                             type="number" 
@@ -147,7 +159,7 @@ function TrackWorkout () {
                     </div>
                     <div className="mb-2">
                         <label htmlFor="time">
-                            <strong>Time</strong>
+                            <strong>Time (min)</strong>
                         </label>
                         <input
                             type="number"  
