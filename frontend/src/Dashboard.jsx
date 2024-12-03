@@ -70,12 +70,12 @@ function Dashboard() {
               className="card h-100 clickable-card">
               <button
               className="btn btn-link p-0 border-0 text-decoration-none"
-              onClick={() => handleNavigation('/graph-progress')} // Handle click event
+              onClick={() => handleNavigation('/progress')} // Handle click event
               style={{ cursor: 'pointer', color: "black" }}
             >
               
-                <h3>Graph Progress</h3>
-                <p>Visualize your workout trends over time!</p>
+                <h3>Progress</h3>
+                <p>Look at your progress towards a goal</p>
               </button>
             </div>
           </div>

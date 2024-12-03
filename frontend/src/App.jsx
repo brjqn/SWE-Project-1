@@ -11,6 +11,7 @@ import {UserProvider} from './UserContext';
 import ProtectedRoute from "./ProtectedRoute";
 import Account from './Account'; 
 import ViewAndEditGoals from './ViewAndEditGoals';
+import Progress from './Progress';
 
 function App() {
   return (
@@ -67,6 +68,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <ViewAndEditGoals />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path='/progress' 
+            element={
+              <ProtectedRoute>
+                <Progress />
               </ProtectedRoute>
             } 
           />
