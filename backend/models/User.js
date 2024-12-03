@@ -1,5 +1,17 @@
 const mongoose = require('mongoose');
 
+const progressSchema = new mongoose.Schema({
+    //date of progress towards a goal
+    assignedDate: {type:Date, default:Date.now},
+    //weight if used in the exercise
+    weight:{type: Number, required: false},
+    //repetitions if used in the exercise
+    repetitions:{type: Number, required: false},
+    //time it takes to complete exercise
+    time:{type: Number, required: false}
+});
+
+
 const goalSchema = new mongoose.Schema({
     //Name of exercise in string format
     ExerciseName: {type:String, required: true},
@@ -10,8 +22,11 @@ const goalSchema = new mongoose.Schema({
     //repetitions if used in the exercise
     repetitions:{type: Number, required: false},
     //time it takes to complete exercise
-    time:{type: Number, required: false}
+    time:{type: Number, required: false},
+    //array of progress objects
+    progressArray:[progressSchema]
 });
+
 
 const UserSchema = new mongoose.Schema({
     name:{

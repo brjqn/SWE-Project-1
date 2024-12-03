@@ -100,11 +100,11 @@ function Dashboard() {
               className="card h-rit-content clickable-card">
               <button
               className="btn btn-link p-0 border-0 text-decoration-none"
-              onClick={() => handleNavigation('/milestones')} // Handle click event
+              onClick={() => handleNavigation('/progress')} // Handle click event
               style={{ cursor: 'pointer', color:"black" }}  
               >
-              <h3>Milestones</h3>
-                <p>Track and celebrate your fitness milestones.</p>  
+              <h3>Progress</h3>
+                <p>Track you progress towards a goal</p>  
               </button>
               
             

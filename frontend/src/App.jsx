@@ -10,6 +10,7 @@ import TrackWorkout from './TrackWorkout';
 import {UserProvider} from './UserContext';
 import ProtectedRoute from "./ProtectedRoute";
 import Account from './Account'; 
+import Progress from './Progress';
 
 function App() {
   return (
@@ -58,6 +59,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Account />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path='/progress' 
+            element={
+              <ProtectedRoute>
+                <Progress />
               </ProtectedRoute>
             } 
           />
