@@ -11,6 +11,9 @@ import {UserProvider} from './UserContext';
 import ProtectedRoute from "./ProtectedRoute";
 import Account from './Account'; 
 import ViewAndEditGoals from './ViewAndEditGoals';
+import Progress from './Progress'
+import GraphOfProgress from './GraphOfProgress';
+import AddProgress from './AddProgress';
 
 function App() {
   return (
@@ -63,10 +66,34 @@ function App() {
             } 
           />
           <Route 
-            path='/viewandeditgoals' 
+            path='/view-and-edit-goals' 
             element={
               <ProtectedRoute>
                 <ViewAndEditGoals />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path='/progress' 
+            element={
+              <ProtectedRoute>
+                <Progress />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path='/graph-of-progress/:goalId' 
+            element={
+              <ProtectedRoute>
+                <GraphOfProgress />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path='/add-progress/:goalId' 
+            element={
+              <ProtectedRoute>
+                <AddProgress />
               </ProtectedRoute>
             } 
           />

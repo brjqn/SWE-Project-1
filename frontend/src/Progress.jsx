@@ -5,19 +5,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './General.css';
 import { UserContext } from "./UserContext";
 
-function TrackWorkout () {
-    const [exerciseName, setExerciseName] = useState()
+function Progress () {
+    const {currentUser} = useContext(UserContext)
     const [assignedDate, setAssignedDate] = useState()  
     const [weight, setWeight] = useState()
     const [repetitions, setRepetitions] = useState()  
     const [time, setTime] = useState()  
-    const {currentUser} = useContext(UserContext)
-    const [exerciseList, setExerciseList] = useState([]);
     
     useEffect(() => {
         const fetchData = async() =>{
             try{
-                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/track-workout`);
+                const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/progress`);
                 setExerciseList(response.data);
                 
             }
@@ -28,96 +26,43 @@ function TrackWorkout () {
         fetchData();
     }, []);
 
-    const handleSelectChange = (event) => {
-        setExerciseName(event.target.value);
-    };
-
     const handleSubmit = (e) => {
-        e.preventDefault();
-    
+        e.preventDefault()
+
+        
         const numericWeight = parseFloat(weight);
         const numericRepetitions = parseInt(repetitions, 10);
         const numericTime = parseFloat(time);
-        const formattedDate = new Date(assignedDate);
-    
+        const formattedDate = new Date(assignedDate); 
+
+        
         if (!exerciseName) {
             alert("Please enter an exercise name.");
             return;
         }
-    
-        axios.post(`${import.meta.env.VITE_BACKEND_URL}/track-workout`, {
-            email: currentUser,
-            ExerciseName: exerciseName,
-            assigned_date: formattedDate,
-            weight: numericWeight,
-            repetitions: numericRepetitions,
-            time: numericTime,
-        })
-        .then((response) => {
-            console.log(response);
-            setExerciseName('');
-            setAssignedDate('');
-            setWeight('');
+        
+
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/track-workout`, {email: currentUser, assigned_date: formattedDate, weight: numericWeight, repetitions: numericRepetitions, time: numericTime})
+        .then(result => {
+            console.log(result);
+            setAssignedDate(''); 
+            setWeight(''); 
             setRepetitions('');
             setTime('');
-    
-            // Show success alert after a successful response
-            alert(response.data.message);
         })
-        .catch((error) => {
-            console.error('Error adding goal:', error);
-            alert('Failed to add goal. Please try again.');
-        });
-    };    
-
-    //alows users to download their goals
-    const handleDownload = async () => {
-        try {
-            //route is automatically handled by App.jsx
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/download-goals/${currentUser}`, {
-                responseType: 'blob', 
-            });
-
-            // Create a link element to link to csv file
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', 'user-goals.csv'); 
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-        } catch (error) {
-            console.error("Error downloading goals:", error);
-            alert("Failed to download goals.");
-        }
+        .catch(err => console.log(err))
     };
+    //alows users to download their goals
+    
 
     return (
         <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
             <div className="bg-white p-3 rounded w-25">
-                <h2>Create Goal</h2>
+                <h2>Add Progress</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-2">
-                        <label htmlFor="name">
-                            <strong>Exercise Name*</strong>
-                        </label>
-                        <select
-                            id="dropdown"
-                            value={exerciseName}
-                            onChange={handleSelectChange}
-                            className="form-control rounded-0"
-                        >
-                            <option value="">Select an Exercise</option>
-                            {exerciseList.map((exercise) => (
-                                <option key={exercise.name} value={exercise.name}>
-                                    {exercise.name || exercise.Exercise}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="mb-2">
                         <label htmlFor="assignedDate">
-                            <strong>Date to Be Completed By*</strong>
+                            <strong>Date*</strong>
                         </label>
                         <input
                             type="date" 
@@ -125,12 +70,11 @@ function TrackWorkout () {
                             value = {assignedDate}
                             className="form-control rounded-0"
                             onChange={(e) => setAssignedDate(e.target.value)}
-                            required={true}
                         />
                     </div>
                     <div className="mb-2">
                         <label htmlFor="weight">
-                            <strong>Weight (lbs)</strong>
+                            <strong>Weight</strong>
                         </label>
                         <input
                             type="number" 
@@ -159,7 +103,7 @@ function TrackWorkout () {
                     </div>
                     <div className="mb-2">
                         <label htmlFor="time">
-                            <strong>Time (min)</strong>
+                            <strong>Time</strong>
                         </label>
                         <input
                             type="number"  
@@ -173,7 +117,7 @@ function TrackWorkout () {
                         />
                     </div>
                     <button type="submit" className="btn btn-success w-100 rounded-0">
-                        Add Goal
+                        Add Progress
                     </button>
                 </form>
             </div>
@@ -182,11 +126,8 @@ function TrackWorkout () {
                     <span>Dashboard</span>
                 </div>.
             </Link>
-            <button onClick={handleDownload} className="other-button">
-                    Download Goals as CSV
-                </button>
         </div>
     );
 }
 
-export default TrackWorkout;
+export default Progress;

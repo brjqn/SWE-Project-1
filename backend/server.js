@@ -237,18 +237,28 @@ const authenticateUser = async (req, res, next) => {
     next();
   };
 
-  app.get('/api/user/profile', authenticateUser, async (req, res) => {
+  app.get('/api/user/profile', async (req, res) => {
     try {
-      const user = await UserModel.findOne({ email: req.userEmail });
-      if (!user) {
-        return res.status(404).json({ message: 'User not found.' });
-      }
-      res.status(200).json({ name: user.name, email: user.email });
+        const { email } = req.query;
+
+        // Find the user by email
+        const user = await UserModel.findOne({ email }).lean();
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Send the user profile including goalArray
+        res.status(200).json({
+            name: user.name,
+            email: user.email,
+            goalArray: user.goalArray || [], // Ensure goalArray defaults to an empty array if not present
+        });
     } catch (error) {
-      console.error('Error fetching user profile:', error);
-      res.status(500).json({ message: 'Server error.' });
+        console.error("Error fetching user profile:", error);
+        res.status(500).json({ message: "Server error." });
     }
-  });
+});
+
 
   // Update email
 app.put('/api/user/email', authenticateUser, async (req, res) => {
@@ -315,6 +325,87 @@ app.put('/api/user/email', authenticateUser, async (req, res) => {
       res.status(500).json({ message: 'Server error while updating password.' });
     }
   });
+
+  app.delete('/api/user/goal', async (req, res) => {
+    const { email, goalId } = req.body;
+
+    try {
+        // Find the user and remove the goal with the matching _id
+        const updatedUser = await UserModel.findOneAndUpdate(
+            { email },
+            { $pull: { goalArray: { _id: goalId } } }, // `$pull` removes the goal by _id
+            { new: true } // Return the updated user document
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        res.status(200).json({
+            message: "Goal deleted successfully.",
+            goalArray: updatedUser.goalArray, // Return updated goalArray
+        });
+    } catch (error) {
+        console.error("Error deleting goal:", error);
+        res.status(500).json({ message: "Server error while deleting goal." });
+    }
+    });
+
+    app.get('/api/goal/:goalId', async (req, res) => {
+        try {
+            const { goalId } = req.params;
+            const user = await UserModel.findOne(
+                { "goalArray._id": goalId }, // Find the goal by its ID
+                { "goalArray.$": 1 } // Only return the matched goal
+            );
+    
+            if (!user || !user.goalArray || user.goalArray.length === 0) {
+                return res.status(404).json({ message: "Goal not found" });
+            }
+    
+            res.status(200).json(user.goalArray[0]); // Return the specific goal
+        } catch (error) {
+            console.error("Error fetching goal details:", error);
+            res.status(500).json({ message: "Server error. Failed to fetch goal details." });
+        }
+    });
+    
+    app.post('/api/goal/progress', async (req, res) => {
+        const { goalId, assignedDate, weight, repetitions, time } = req.body;
+    
+        try {
+            // Validate and parse the date
+            const formattedDate = assignedDate ? new Date(assignedDate) : new Date(); // Use provided date or default to now
+            if (isNaN(formattedDate.getTime())) {
+                return res.status(400).json({ message: "Invalid assigned date." });
+            }
+    
+            // Update the progressArray in the specific goal
+            const updatedUser = await UserModel.findOneAndUpdate(
+                { "goalArray._id": goalId },
+                {
+                    $push: {
+                        "goalArray.$.progressArray": {
+                            assignedDate: formattedDate, // Use the correct field name
+                            weight: weight || null,
+                            repetitions: repetitions || null,
+                            time: time || null,
+                        },
+                    },
+                },
+                { new: true } // Return the updated document
+            );
+    
+            if (!updatedUser) {
+                return res.status(404).json({ message: "Goal not found." });
+            }
+    
+            res.status(200).json({ message: "Progress added successfully", user: updatedUser });
+        } catch (error) {
+            console.error("Error adding progress:", error);
+            res.status(500).json({ message: "Server error. Failed to add progress." });
+        }
+    });
     
 
 app.listen(5001, () => {

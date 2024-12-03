@@ -65,20 +65,20 @@ function Dashboard() {
           </div>
 
           {/* Graph Progress Card */}
-          <div className="col-md-5 mb-4">
+          {/* <div className="col-md-5 mb-4">
             <div 
               className="card h-100 clickable-card">
               <button
               className="btn btn-link p-0 border-0 text-decoration-none"
-              onClick={() => handleNavigation('/graph-progress')} // Handle click event
+              onClick={() => handleNavigation('/progress')} // Handle click event
               style={{ cursor: 'pointer', color: "black" }}
             >
               
-                <h3>Graph Progress</h3>
-                <p>Visualize your workout trends over time!</p>
+                <h3>Progress</h3>
+                <p>Look at your progress towards a goal</p>
               </button>
             </div>
-          </div>
+          </div> */}
 
           {/* Exercise List Card */}
           <div className="col-md-5 mb-4">
@@ -102,7 +102,7 @@ function Dashboard() {
               className="card h-rit-content clickable-card">
               <button
               className="btn btn-link p-0 border-0 text-decoration-none"
-              onClick={() => handleNavigation('/viewandeditgoals')} // Handle click event
+              onClick={() => handleNavigation('/view-and-edit-goals')} // Handle click event
               style={{ cursor: 'pointer', color:"black" }}  
               >
               <h3>View and Edit Goals</h3>

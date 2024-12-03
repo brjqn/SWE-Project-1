@@ -152,13 +152,13 @@ const DropDownComponent = () => {
                     
                 </ul>
             </div>
-            <Link to="../track-workout" style={{ textDecoration: 'none', color: 'black' }}>
+            {/* <Link to="../track-workout" style={{ textDecoration: 'none', color: 'black' }}>
                 <div className = "box2 d-flex flex-column justify-content-center align-items-center">
                 <span>Add exercise to workout </span>
                 
                 
                 </div>
-            </Link>
+            </Link> */}
             <Link to="./add-exercise" style={{ textDecoration: 'none', color: 'black' }}>
                 <div className = "box2 d-flex flex- justify-content-center align-items-center">
                 <span>Add New Exercise </span>
