@@ -10,6 +10,7 @@ import TrackWorkout from './TrackWorkout';
 import {UserProvider} from './UserContext';
 import ProtectedRoute from "./ProtectedRoute";
 import Account from './Account'; 
+import ViewAndEditGoals from './ViewAndEditGoals';
 import Progress from './Progress';
 
 function App() {
@@ -59,6 +60,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Account />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path='/viewandeditgoals' 
+            element={
+              <ProtectedRoute>
+                <ViewAndEditGoals />
               </ProtectedRoute>
             } 
           />

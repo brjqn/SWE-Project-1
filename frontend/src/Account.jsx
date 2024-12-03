@@ -19,7 +19,9 @@ const Account = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/profile`, {
+
           params: {
             email: currentUser,
           },

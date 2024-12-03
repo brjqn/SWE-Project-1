@@ -2,6 +2,8 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Dashboard.css'; // Custom CSS for styling the dashboard
 import { useNavigate } from 'react-router-dom'; // To navigate on click
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ViewAndEditGoals from './ViewAndEditGoals'
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -56,8 +58,8 @@ function Dashboard() {
               style={{ cursor: 'pointer', color: "black" }}
               >
               
-                <h3>Track Workout</h3>
-                <p>Record your workout progress.</p>
+                <h3>Create Goal</h3>
+                <p>Create new exercise goal!</p>
               </button>
             </div>
           </div>
@@ -68,12 +70,12 @@ function Dashboard() {
               className="card h-100 clickable-card">
               <button
               className="btn btn-link p-0 border-0 text-decoration-none"
-              onClick={() => handleNavigation('/graph-progress')} // Handle click event
+              onClick={() => handleNavigation('/progress')} // Handle click event
               style={{ cursor: 'pointer', color: "black" }}
             >
               
-                <h3>Graph Progress</h3>
-                <p>Visualize your workout trends over time.</p>
+                <h3>Progress</h3>
+                <p>Look at your progress towards a goal</p>
               </button>
             </div>
           </div>
@@ -88,8 +90,8 @@ function Dashboard() {
               style={{ cursor: 'pointer', color: "black" }}
             >
               
-                <h3>Exercise List</h3>
-                <p>Browse exercises.</p>
+              <h3>Add New Exercises</h3>
+              <p>Your exercise isn't in our predefined set? Add new ones here!</p>
               </button>
             </div>
           </div>
@@ -100,11 +102,11 @@ function Dashboard() {
               className="card h-rit-content clickable-card">
               <button
               className="btn btn-link p-0 border-0 text-decoration-none"
-              onClick={() => handleNavigation('/progress')} // Handle click event
+              onClick={() => handleNavigation('/viewandeditgoals')} // Handle click event
               style={{ cursor: 'pointer', color:"black" }}  
               >
-              <h3>Progress</h3>
-                <p>Track you progress towards a goal</p>  
+              <h3>View and Edit Goals</h3>
+                <p>Browse your current goals!</p>  
               </button>
               
             
