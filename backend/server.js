@@ -241,12 +241,14 @@ const authenticateUser = async (req, res, next) => {
     try {
         const { email } = req.query;
 
-        if (!validator.isEmail(email)) {
-            return res.status(400).json({ message: 'Invalid email format' });
+        // Validate and sanitize the email
+        if (!email || !validator.isEmail(email)) {
+            return res.status(400).json({ message: 'Invalid or missing email format' });
         }
+        const sanitizedEmail = validator.normalizeEmail(email); // Normalize the email for consistency
 
-        // Find the user by email
-        const user = await UserModel.findOne({ email }).lean();
+        // Use a parameterized query to prevent potential injection
+        const user = await UserModel.findOne({ email: sanitizedEmail }).lean();
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -337,17 +339,22 @@ app.put('/api/user/email', authenticateUser, async (req, res) => {
   app.delete('/api/user/goal', async (req, res) => {
     const { email, goalId } = req.body;
 
-    if (!validator.isEmail(email)) {
-        return res.status(400).json({ message: 'Invalid email format' });
+    if (!email || !validator.isEmail(email)) {
+        return res.status(400).json({ message: 'Invalid or missing email format' });
+    }
+    const sanitizedEmail = validator.normalizeEmail(email);
+
+    if (!goalId || !mongoose.Types.ObjectId.isValid(goalId)) {
+        return res.status(400).json({ message: 'Invalid goal ID format' });
     }
 
     try {
         // Find the user and remove the goal with the matching _id
         const updatedUser = await UserModel.findOneAndUpdate(
-            { email },
+            {email: sanitizedEmail },
             { $pull: { goalArray: { _id: goalId } } }, // `$pull` removes the goal by _id
             { new: true } // Return the updated user document
-        );
+        ).lean();
 
         if (!updatedUser) {
             return res.status(404).json({ message: "User not found." });
@@ -395,10 +402,14 @@ app.put('/api/user/email', authenticateUser, async (req, res) => {
             if (isNaN(formattedDate.getTime())) {
                 return res.status(400).json({ message: "Invalid assigned date." });
             }
-            goalId.toString().trim()
+
+            if (!mongoose.Types.ObjectId.isValid(goalId)) {
+                return res.status(400).json({ message: "Invalid goal ID format." });
+            }
+            const sanitizedGoalId = goalId.toString().trim();
             // Update the progressArray in the specific goal
             const updatedUser = await UserModel.findOneAndUpdate(
-                { "goalArray._id": goalId },
+                { "goalArray._id": sanitizedGoalId},
                 {
                     $push: {
                         "goalArray.$.progressArray": {
