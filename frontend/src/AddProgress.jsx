@@ -27,6 +27,8 @@ function AddProgress() {
     // Handle input changes
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+
+
         setFormData({
             ...formData,
             [name]: value,
@@ -36,6 +38,18 @@ function AddProgress() {
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (goal.weight !== null && formData.weight && parseFloat(formData.weight) > goal.weight) {
+            alert("Goal reached! You exceeded the goal weight.");
+        }
+
+        if (goal.repetitions !== null && formData.repetitions && parseFloat(formData.repetitions) > goal.repetitions) {
+            alert("Goal reached! You exceeded the goal repetitions.");
+        }
+
+        if (goal.time !== null && formData.time && parseFloat(formData.time) > goal.time) {
+            alert("Goal reached! You exceeded the goal time.");
+        }
 
         try {
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/goal/progress`, {

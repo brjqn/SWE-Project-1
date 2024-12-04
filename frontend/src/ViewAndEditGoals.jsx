@@ -85,13 +85,14 @@ function ViewAndEditGoals() {
             {message && <p className="text-center text-success">{message}</p>}
             <div className="row">
                 {userData.goalArray.length > 0 ? (
-                    userData.goalArray.map((goal, index) => (
-                        <div className="col-md-4 mb-4" key={index}>
+                    userData.goalArray.map((goal) => (
+                        <div className="col-md-4 mb-4" key={goal._id}>
                             <div className="card h-100">
                                 <div className="card-body">
                                     <h5 className="card-title">{goal.ExerciseName}</h5>
                                     <p className="card-text">
-                                        <strong>Date:</strong> {new Date(goal.assigned_date).toLocaleDateString('en-US', { timeZone: 'UTC' })} <br />
+                                        <strong>Date:</strong>{' '}
+                                        {new Date(goal.assigned_date).toLocaleDateString('en-US', { timeZone: 'UTC' })} <br />
                                         <strong>Weight:</strong> {goal.weight || 'N/A'} lbs <br />
                                         <strong>Repetitions:</strong> {goal.repetitions || 'N/A'} <br />
                                         <strong>Time:</strong> {goal.time || 'N/A'} minutes
@@ -122,32 +123,48 @@ function ViewAndEditGoals() {
                     <p className="text-center">No goals found. Add some goals to get started!</p>
                 )}
             </div>
-
             {/* Confirmation Modal */}
             {showConfirm && (
-                <div className="modal show d-block" tabIndex="-1" role="dialog" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Confirm Deletion</h5>
-                                <button type="button" className="close" onClick={() => setShowConfirm(false)} aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                <p>Are you sure you want to delete this goal? This action cannot be undone.</p>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" onClick={() => setShowConfirm(false)}>
-                                    Cancel
-                                </button>
-                                <button type="button" className="btn btn-danger" onClick={handleDeleteGoal}>
-                                    Confirm Delete
-                                </button>
-                            </div>
+                <dialog
+                className="modal show d-block"
+                open // The 'open' attribute makes the dialog visible
+                style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+            >
+                <div className="modal-dialog" aria-labelledby="modalTitle" aria-hidden="true">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 id="modalTitle" className="modal-title">Confirm Deletion</h5>
+                            <button
+                                type="button"
+                                className="close"
+                                onClick={() => setShowConfirm(false)}
+                                aria-label="Close"
+                            >
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <p>Are you sure you want to delete this goal? This action cannot be undone.</p>
+                        </div>
+                        <div className="modal-footer">
+                            <button
+                                type="button"
+                                className="btn btn-secondary"
+                                onClick={() => setShowConfirm(false)}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                className="btn btn-danger"
+                                onClick={handleDeleteGoal}
+                            >
+                                Confirm Delete
+                            </button>
                         </div>
                     </div>
                 </div>
+            </dialog>
             )}
         </div>
     );

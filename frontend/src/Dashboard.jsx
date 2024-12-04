@@ -2,8 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Dashboard.css'; // Custom CSS for styling the dashboard
 import { useNavigate } from 'react-router-dom'; // To navigate on click
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ViewAndEditGoals from './ViewAndEditGoals'
+
 
 function Dashboard() {
   const navigate = useNavigate();
