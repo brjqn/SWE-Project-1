@@ -5,6 +5,7 @@ Users can create, edit, and delete goals.
 Exercises with descriptions and pictures can be accessed and created.
 Users can login to the system and change their account details in the account page. 
 <H3> How to Install and Run the Project</H3>
+You can look through our Wiki here: https://github.com/brjqn/SWE-Project-1/wiki or go through the following steps . <br>
 All packages were installed through npm: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 </n> run npm install ...
 <li>nodemon</li>
@@ -21,6 +22,8 @@ All packages were installed through npm: https://docs.npmjs.com/downloading-and-
 <li>react-dom</li>
 <li>jest</li>
 <li>faker@faker-js</li>
+<li>chart.js</li>
+<li>react-chartjs-2</li>
 After installing these look at the adding evironment files in the wiki to create the correct connection string and local environment. 
 Then cd into backend and run <npm run start>
 Then cd into frontend and run <npm run dev>
