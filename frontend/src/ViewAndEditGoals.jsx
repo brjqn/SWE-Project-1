@@ -130,10 +130,10 @@ function ViewAndEditGoals() {
                 open // The 'open' attribute makes the dialog visible
                 style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
             >
-                <div className="modal-dialog" role="document">
+                <div className="modal-dialog" aria-labelledby="modalTitle" aria-hidden="true">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title">Confirm Deletion</h5>
+                            <h5 id="modalTitle" className="modal-title">Confirm Deletion</h5>
                             <button
                                 type="button"
                                 className="close"
