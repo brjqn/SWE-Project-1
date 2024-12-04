@@ -16,7 +16,7 @@ let corsOptions = {
 
 let app = express();
 app.use(express.json());
-app.use(cors(corsOptions)); //put back corsOptions
+app.use(cors()); //put back corsOptions
 app.disable('x-powered-by');
 const databaseURI = process.env.MONGO_URI;
 mongoose.connect(databaseURI)
@@ -241,6 +241,10 @@ const authenticateUser = async (req, res, next) => {
     try {
         const { email } = req.query;
 
+        if (!validator.isEmail(email)) {
+            return res.status(400).json({ message: 'Invalid email format' });
+        }
+
         // Find the user by email
         const user = await UserModel.findOne({ email }).lean();
         if (!user) {
@@ -301,6 +305,10 @@ app.put('/api/user/email', authenticateUser, async (req, res) => {
     if (currentEmail !== req.userEmail) {
       return res.status(403).json({ message: 'Account not found.' });
     }
+
+    if (!validator.isEmail(currentEmail)) {
+        return res.status(400).json({ message: 'Invalid email format' });
+    }
   
     try {
       // Find user by email
@@ -329,6 +337,10 @@ app.put('/api/user/email', authenticateUser, async (req, res) => {
   app.delete('/api/user/goal', async (req, res) => {
     const { email, goalId } = req.body;
 
+    if (!validator.isEmail(email)) {
+        return res.status(400).json({ message: 'Invalid email format' });
+    }
+
     try {
         // Find the user and remove the goal with the matching _id
         const updatedUser = await UserModel.findOneAndUpdate(
@@ -354,6 +366,10 @@ app.put('/api/user/email', authenticateUser, async (req, res) => {
     app.get('/api/goal/:goalId', async (req, res) => {
         try {
             const { goalId } = req.params;
+            
+    
+
+            
             const user = await UserModel.findOne(
                 { "goalArray._id": goalId }, // Find the goal by its ID
                 { "goalArray.$": 1 } // Only return the matched goal
@@ -379,7 +395,7 @@ app.put('/api/user/email', authenticateUser, async (req, res) => {
             if (isNaN(formattedDate.getTime())) {
                 return res.status(400).json({ message: "Invalid assigned date." });
             }
-    
+            goalId.toString().trim()
             // Update the progressArray in the specific goal
             const updatedUser = await UserModel.findOneAndUpdate(
                 { "goalArray._id": goalId },

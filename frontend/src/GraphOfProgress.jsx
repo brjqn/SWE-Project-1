@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from "react-router-dom";
-import { useParams } from 'react-router-dom';
+import { Link,useParams } from "react-router-dom";
 import { Line } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
