@@ -184,7 +184,7 @@ function TrackWorkout () {
             </Link>
             <button onClick={handleDownload} className="other-button">
                     Download Goals as CSV
-                </button>
+            </button>
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
 function AddProgress() {
@@ -33,6 +33,10 @@ function AddProgress() {
             ...formData,
             [name]: value,
         });
+    };
+
+    const handleViewAndEditGoals = () => {
+        navigate('../view-and-edit-goals'); // Replace with your actual route
     };
 
     // Handle form submission
@@ -150,6 +154,15 @@ function AddProgress() {
                 )}
                 <button type="submit" className="btn btn-primary w-100">Add Progress</button>
             </form>
+            <Link to="../dashboard" style={{ textDecoration: 'none', color: 'black' }}>
+                <div className="dash-button d-flex flex- justify-content-center align-items-center">
+                    <span>Dashboard</span>
+                </div>.
+            </Link>
+            {/* View and Edit Goals Button */}
+            <button onClick={handleViewAndEditGoals} className="other-button">
+                Your Goals
+            </button>
         </div>
     );
 }
