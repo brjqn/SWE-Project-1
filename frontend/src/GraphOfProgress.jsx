@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link,useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { Line } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -19,6 +19,7 @@ function GraphOfProgress() {
     const { goalId } = useParams(); // Get goalId from the URL
     const [progressArray, setProgressArray] = useState([]);
     const [goal, setGoal] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchGoalData = async () => {
@@ -50,7 +51,11 @@ function GraphOfProgress() {
 
         return 0;
     };
-    
+
+    const handleViewAndEditGoals = () => {
+        navigate('../view-and-edit-goals'); // Replace with your actual route
+    };
+
     const goalScore = goal ? calculateScore(goal) : null;
 
 
@@ -97,8 +102,24 @@ function GraphOfProgress() {
     };
 
     if (!progressArray.length) {
-        return <div>Loading or no progress available.</div>;
+        return (
+            <div>
+                <h1 className="text-center">Loading or No Progress</h1>
+                {/* Dashboard Button */}
+                <Link to="../dashboard" style={{ textDecoration: 'none', color: 'black' }}>
+                    <div className="dash-button d-flex flex-justify-content-center align-items-center">
+                        <span>Dashboard</span>
+                    </div>
+                </Link>
+                {/* View and Edit Goals Button */}
+                <button onClick={handleViewAndEditGoals} className="other-button">
+                    Your Goals
+                </button>
+            </div>
+        );
     }
+    
+    
 
     return (
         <div className="container">
@@ -138,6 +159,10 @@ function GraphOfProgress() {
                     <span>Dashboard</span>
                 </div>.
             </Link>
+            {/* View and Edit Goals Button */}
+            <button onClick={handleViewAndEditGoals} className="other-button">
+                Your Goals
+            </button>
         </div>
     );
 }

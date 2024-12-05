@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import { UserContext } from './UserContext'; // Import UserContext
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Import Link
 
 function ViewAndEditGoals() {
     const { currentUser } = useContext(UserContext); // Access the logged-in user's email
@@ -65,7 +65,6 @@ function ViewAndEditGoals() {
         }
     };
 
-
     const handleConfirmDelete = (goalId) => {
         setGoalToDelete(goalId); // Set the goal to delete
         setShowConfirm(true); // Show the confirmation modal
@@ -126,46 +125,52 @@ function ViewAndEditGoals() {
             {/* Confirmation Modal */}
             {showConfirm && (
                 <dialog
-                className="modal show d-block"
-                open // The 'open' attribute makes the dialog visible
-                style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
-            >
-                <div className="modal-dialog" aria-labelledby="modalTitle" aria-hidden="true">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 id="modalTitle" className="modal-title">Confirm Deletion</h5>
-                            <button
-                                type="button"
-                                className="close"
-                                onClick={() => setShowConfirm(false)}
-                                aria-label="Close"
-                            >
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            <p>Are you sure you want to delete this goal? This action cannot be undone.</p>
-                        </div>
-                        <div className="modal-footer">
-                            <button
-                                type="button"
-                                className="btn btn-secondary"
-                                onClick={() => setShowConfirm(false)}
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                type="button"
-                                className="btn btn-danger"
-                                onClick={handleDeleteGoal}
-                            >
-                                Confirm Delete
-                            </button>
+                    className="modal show d-block"
+                    open // The 'open' attribute makes the dialog visible
+                    style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+                >
+                    <div className="modal-dialog" aria-labelledby="modalTitle" aria-hidden="true">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 id="modalTitle" className="modal-title">Confirm Deletion</h5>
+                                <button
+                                    type="button"
+                                    className="close"
+                                    onClick={() => setShowConfirm(false)}
+                                    aria-label="Close"
+                                >
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <p>Are you sure you want to delete this goal? This action cannot be undone.</p>
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    onClick={() => setShowConfirm(false)}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-danger"
+                                    onClick={handleDeleteGoal}
+                                >
+                                    Confirm Delete
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </dialog>
+                </dialog>
             )}
+            {/* Dashboard Button */}
+            <Link to="../dashboard" style={{ textDecoration: 'none', color: 'black' }}>
+                <div className="dash-button d-flex flex-justify-content-center align-items-center">
+                    <span>Dashboard</span>
+                </div>
+            </Link>
         </div>
     );
 }

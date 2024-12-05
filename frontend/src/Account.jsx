@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Account.css'; // Use your original styling
 import axios from 'axios';
 import { UserContext } from './UserContext'; // Import UserContext
+import {Link} from 'react-router-dom'
 
 const Account = () => {
   const { currentUser } = useContext(UserContext); // Access the logged-in user's email
@@ -156,6 +157,12 @@ const Account = () => {
 
         {message && <p className="mt-3 message">{message}</p>}
       </div>
+      {/* Dashboard Button */}
+      <Link to="../dashboard" style={{ textDecoration: 'none', color: 'black' }}>
+        <div className="dash-button d-flex flex-justify-content-center align-items-center">
+            <span>Dashboard</span>
+        </div>
+      </Link>
     </div>
   );
 };
